@@ -24,7 +24,14 @@ const CourseSelectionList = ({courseData, programState, handleCourseSelection}) 
   return (
     <div className="CourseSelectionList">
       {courseData.map((course, courseIndex) => 
-      <Button color="primary" className="CourseSelectionListItem" key={programState.courses[courseIndex].id} onClick={handleCourseSelection(courseIndex)}>{course.courseName}</Button>
+      <Button 
+        key={programState.courses[courseIndex].id} 
+        color="primary" 
+        className="CourseSelectionListItem" 
+        onClick={handleCourseSelection(courseIndex)
+      }>
+        {course.courseName}
+      </Button>
       )}
     </div>
   );
@@ -32,16 +39,30 @@ const CourseSelectionList = ({courseData, programState, handleCourseSelection}) 
 
 // Display an individual question
 const Question = ({question, programState, showAnswers, handleAnswerSelection}) => {
-  let showDogMark = true;
-  programState.answers.forEach((userAnswer, index) => { if (userAnswer.checked !== question.answers[index].correctAnswer) {showDogMark = false;}});
+  let showCorrectAnswerMark = true;
+  programState.answers.forEach((userAnswer, index) => { if (userAnswer.checked !== question.answers[index].correctAnswer) {showCorrectAnswerMark = false;}});
 
   return(
     <Paper className="Question">
-      <p>{question.questionString} {showAnswers && showDogMark && <img className="dogImage" src="dog_image.png" alt="dog head"/>}</p>
+      <p>
+        {question.questionString} 
+        {showAnswers && showCorrectAnswerMark && <img className="dogImage" src="dog_image.png" alt="dog head"/>}
+      </p>
       {question.answers.map((answer, answerIndex) => 
         <div key={programState.answers[answerIndex].id}>
-          <Checkbox color="primary" onChange={handleAnswerSelection(answerIndex)} checked={programState.answers[answerIndex].checked} readOnly={true}/>
-          {showAnswers && <Checkbox color="secondary" checked={question.answers[answerIndex].correctAnswer} readOnly={true}/>}
+          <Checkbox 
+            color="primary" 
+            onChange={handleAnswerSelection(answerIndex)} 
+            checked={programState.answers[answerIndex].checked} 
+            readOnly={true}
+          />
+          {showAnswers && 
+            <Checkbox 
+              color="secondary" 
+              checked={question.answers[answerIndex].correctAnswer} 
+              readOnly={true}
+            />
+          }
           {answer.answerString}
         </div>
       )}
@@ -150,11 +171,13 @@ const App = () => {
             courseData={courseData}
             programState={programState}
             handleAnswerSelection={handleAnswerSelection}
-            handleFinishAnswering={handleFinishAnswering}/>
+            handleFinishAnswering={handleFinishAnswering}
+          />
           <CourseSelectionList 
             courseData={courseData}
             programState={programState}
-            handleCourseSelection={handleCourseSelection}/>
+            handleCourseSelection={handleCourseSelection}
+          />
         </>}
       </main>
     </div>
