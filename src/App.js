@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 
+// Display navigation header
 const Header = () => {
   return (
     <header className="Header">
@@ -18,6 +19,7 @@ const Header = () => {
   );
 }
 
+// Display the list of available course
 const CourseSelectionList = ({courseData, programState, handleCourseSelection}) => {
   return (
     <div className="CourseSelectionList">
@@ -28,6 +30,7 @@ const CourseSelectionList = ({courseData, programState, handleCourseSelection}) 
   );
 }
 
+// Display an individual question
 const Question = ({question, programState, showAnswers, handleAnswerSelection}) => {
   let showDogMark = true;
   programState.answers.forEach((userAnswer, index) => { if (userAnswer.checked !== question.answers[index].correctAnswer) {showDogMark = false;}});
@@ -112,6 +115,7 @@ const App = () => {
     //}
   }, []);
 
+  // Functionality to change courses based on clicks
   const handleCourseSelection = (courseIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.activeCourse = courseIndex;
@@ -120,6 +124,7 @@ const App = () => {
     window.localStorage.setItem("programState", JSON.stringify(newProgramState));
   }
 
+  // Functionality to set an answer selected
   const handleAnswerSelection = (courseIndex, questionInedex) => (answerIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions[questionInedex].answers[answerIndex].checked = !newProgramState.courses[courseIndex].questions[questionInedex].answers[answerIndex].checked;
@@ -127,6 +132,7 @@ const App = () => {
     window.localStorage.setItem("programState", JSON.stringify(newProgramState));
   }
 
+  // Functionality to finish answering and move to check for correctness
   const handleFinishAnswering = () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.showAnswers = true;
@@ -138,17 +144,18 @@ const App = () => {
     <div className="App">
       <Header/>
       <main className="mainContent">
-        {courseData.length > 0 && programState.courses && 
-          <CourseSelectionList 
-            courseData={courseData}
-            programState={programState}
-            handleCourseSelection={handleCourseSelection}/>}
-        {courseData.length > 0 && programState.courses && 
+        {courseData.length > 0 && programState.courses &&
+        <>
           <CourseExamQuestions
             courseData={courseData}
             programState={programState}
             handleAnswerSelection={handleAnswerSelection}
-            handleFinishAnswering={handleFinishAnswering}/>}
+            handleFinishAnswering={handleFinishAnswering}/>
+          <CourseSelectionList 
+            courseData={courseData}
+            programState={programState}
+            handleCourseSelection={handleCourseSelection}/>
+        </>}
       </main>
     </div>
   );
