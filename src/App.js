@@ -40,7 +40,11 @@ const CourseSelectionList = ({courseData, programState, handleCourseSelection}) 
 // Display an individual question
 const Question = ({question, programState, showAnswers, handleAnswerSelection}) => {
   let showCorrectAnswerMark = true;
-  programState.answers.forEach((userAnswer, index) => { if (userAnswer.checked !== question.answers[index].correctAnswer) {showCorrectAnswerMark = false;}});
+  programState.answers.forEach((userAnswer, index) => { 
+    if (userAnswer.checked !== question.answers[index].correctAnswer) {
+      showCorrectAnswerMark = false;
+    }
+  });
 
   return(
     <Paper className="Question">
@@ -77,12 +81,13 @@ const CourseExamQuestions = ({courseData, programState, handleAnswerSelection, h
       <div className="ExamQuestions">
         {courseData[programState.activeCourse].questions.map((question, questionIndex) => {
           return(
-          <Question
-            key={programState.courses[programState.activeCourse].questions[questionIndex].id}
-            question={question}
-            programState={programState.courses[programState.activeCourse].questions[questionIndex]}
-            showAnswers={programState.showAnswers}
-            handleAnswerSelection={handleAnswerSelection(programState.activeCourse, questionIndex)}/>
+            <Question
+              key={programState.courses[programState.activeCourse].questions[questionIndex].id}
+              question={question}
+              programState={programState.courses[programState.activeCourse].questions[questionIndex]}
+              showAnswers={programState.showAnswers}
+              handleAnswerSelection={handleAnswerSelection(programState.activeCourse, questionIndex)}
+            />
           )
         }
         )}
@@ -111,29 +116,20 @@ const App = () => {
   const [programState, setProgramState] = useState({});
 
   useEffect(() => {
-    /*
-    const localStorageState = window.localStorage.getItem("programState");
-    const localStorageData = window.localStorage.getItem("courseData");
-    if (localStorageState && localStorageData) {
-      setCourseData(JSON.parse(localStorageState));
-      setProgramState(JSON.parse(localStorageData));
-    } else {
-    */
-      axios
-        .get('http://localhost:3001/kurssit')
-        .then((response) => {
-          const newProgramState = {};
-          newProgramState.activeCourse = 0;
-          newProgramState.UIDGenerator = new UIDGenerator();
-          newProgramState.showAnswers = false;
-          newProgramState.courses = formNewProgramState(response.data, newProgramState.UIDGenerator);
-          setCourseData(response.data);
-          setProgramState(newProgramState);
-          window.localStorage.setItem("courseData", JSON.stringify(response.data));
-          window.localStorage.setItem("programState", JSON.stringify(newProgramState));
-        }
-      );
-    //}
+    axios
+      .get('http://localhost:3001/kurssit')
+      .then((response) => {
+        const newProgramState = {};
+        newProgramState.activeCourse = 0;
+        newProgramState.UIDGenerator = new UIDGenerator();
+        newProgramState.showAnswers = false;
+        newProgramState.courses = formNewProgramState(response.data, newProgramState.UIDGenerator);
+        setCourseData(response.data);
+        setProgramState(newProgramState);
+        window.localStorage.setItem("courseData", JSON.stringify(response.data));
+        window.localStorage.setItem("programState", JSON.stringify(newProgramState));
+      }
+    );                  
   }, []);
 
   // Functionality to change courses based on clicks
@@ -145,10 +141,11 @@ const App = () => {
     window.localStorage.setItem("programState", JSON.stringify(newProgramState));
   }
 
-  // Functionality to set an answer selected
+  // Functionality to handle checkbox selection functionality for user answers
   const handleAnswerSelection = (courseIndex, questionInedex) => (answerIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
-    newProgramState.courses[courseIndex].questions[questionInedex].answers[answerIndex].checked = !newProgramState.courses[courseIndex].questions[questionInedex].answers[answerIndex].checked;
+    newProgramState.courses[courseIndex].questions[questionInedex].answers[answerIndex].checked = 
+      !newProgramState.courses[courseIndex].questions[questionInedex].answers[answerIndex].checked;
     setProgramState(newProgramState);
     window.localStorage.setItem("programState", JSON.stringify(newProgramState));
   }
@@ -167,16 +164,16 @@ const App = () => {
       <main className="mainContent">
         {courseData.length > 0 && programState.courses &&
         <>
+          <CourseSelectionList 
+            courseData={courseData}
+            programState={programState}
+            handleCourseSelection={handleCourseSelection}
+          />
           <CourseExamQuestions
             courseData={courseData}
             programState={programState}
             handleAnswerSelection={handleAnswerSelection}
             handleFinishAnswering={handleFinishAnswering}
-          />
-          <CourseSelectionList 
-            courseData={courseData}
-            programState={programState}
-            handleCourseSelection={handleCourseSelection}
           />
         </>}
       </main>
