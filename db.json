@@ -1,5 +1,5 @@
 {
-  "kurssit": [
+  "courses": [
     {
       "courseName": "testikurssi 1",
       "questions": [
@@ -8,19 +8,19 @@
           "answers": [
             {
               "answerString": "testivastaus 1",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 2",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 3",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 4",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             }
           ]
         },
@@ -29,19 +29,19 @@
           "answers": [
             {
               "answerString": "testivastaus 1",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 2",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 3",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 4",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             }
           ]
         },
@@ -50,19 +50,19 @@
           "answers": [
             {
               "answerString": "testivastaus 1",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 2",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 3",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 4",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             }
           ]
         },
@@ -71,19 +71,19 @@
           "answers": [
             {
               "answerString": "testivastaus 1",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 2",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 3",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 4",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             }
           ]
         }
@@ -97,19 +97,19 @@
           "answers": [
             {
               "answerString": "testivastaus 1",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 2",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 3",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 4",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             }
           ]
         },
@@ -118,19 +118,19 @@
           "answers": [
             {
               "answerString": "testivastaus 1",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 2",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 3",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 4",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             }
           ]
         },
@@ -139,19 +139,19 @@
           "answers": [
             {
               "answerString": "testivastaus 1",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 2",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 3",
-              "correctAnswer": false
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 4",
-              "correctAnswer": true
+              "isCorrectAnswer": true
             }
           ]
         }
