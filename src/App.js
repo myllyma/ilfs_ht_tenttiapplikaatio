@@ -81,7 +81,7 @@ const App = () => {
       questions: []
     };
     newCourse.id = uuid();
-    newProgramState.courses.concat(newCourse);
+    newProgramState.courses = newProgramState.courses.concat(newCourse);
     setProgramState(newProgramState);
     console.log("Executed handleCourseAddition");
   }
@@ -89,8 +89,7 @@ const App = () => {
   // Remove a course *ADMIN*
   const handleCourseDeletion = (courseIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
-    newProgramState.courses = 
-      newProgramState.courses.splice(courseIndex, 1);
+    newProgramState.courses.splice(courseIndex, 1);
     setProgramState(newProgramState);
     console.log("Executed handleCourseDeletion");
   }
@@ -103,7 +102,7 @@ const App = () => {
       answers: []
     };
     newQuestion.id = uuid();
-    newProgramState.courses[courseIndex].questions.concat(newQuestion);
+    newProgramState.courses[courseIndex].questions = newProgramState.courses[courseIndex].questions.concat(newQuestion);
     setProgramState(newProgramState);
     console.log("Executed handleQuestionAdding");
   }
@@ -111,8 +110,7 @@ const App = () => {
   // Remove question from a course *ADMIN*
   const handleQuestionDeletion = (courseIndex, questionIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
-    newProgramState.courses[courseIndex].questions = 
-      newProgramState.courses[courseIndex].questions.splice(questionIndex, 1);
+    newProgramState.courses[courseIndex].questions.splice(questionIndex, 1);
     setProgramState(newProgramState);
     console.log("Executed handleQuestionDeletion");
   }
@@ -124,17 +122,17 @@ const App = () => {
       answerString: "",
       correctAnswer: false
     };
-    newAnswer.id = programState.UIDGenerator.generateSync();
-    newProgramState.courses[courseIndex].questions[questionIndex].answers.concat(newAnswer);
+    newAnswer.id = uuid();
+    newProgramState.courses[courseIndex].questions[questionIndex].answers =
+      newProgramState.courses[courseIndex].questions[questionIndex].answers.concat(newAnswer);
     setProgramState(newProgramState);
-    console.log("Executed handleAnswerAdding");
+    console.log("Executed handleAnswerAdding, newAnswer:", newAnswer);
   }
 
   // Delete an answer from a question *ADMIN*
   const handleAnswerDeletion = (courseIndex, questionIndex) => (answerIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
-    newProgramState.courses[courseIndex].questions[questionIndex].answers = 
-      newProgramState.courses[courseIndex].questions[questionIndex].answers.splice(answerIndex, 1);
+    newProgramState.courses[courseIndex].questions[questionIndex].answers.splice(answerIndex, 1);
     setProgramState(newProgramState);
     console.log("Executed handleAnswerDeletion");
   }
@@ -142,10 +140,28 @@ const App = () => {
   // Toggle the state of an answer's correctness *ADMIN*
   const handleAnswerCorrectnessSetting = (courseIndex, questionIndex) => (answerIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
-    newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrect = 
-      !newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrect;
+    newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrectAnswer = 
+      !newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrectAnswer;
     setProgramState(newProgramState);
-    console.log("Executed handleAnswerCorrectnessSetting");
+    console.log("Executed handleAnswerCorrectnessSetting: courseIndex:", courseIndex, "questionIndex:", questionIndex, "answerIndex", answerIndex, "isCorrect:", newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrect);
+  }
+
+  const handleCourseNameChange = (courseIndex) => (event) => {
+    const newProgramState = JSON.parse(JSON.stringify(programState));
+    newProgramState.courses[courseIndex].courseName = event.target.value;
+    setProgramState(newProgramState);
+  }
+
+  const handleQuestionStringChange = (courseIndex, questionIndex) => (event) => {
+    const newProgramState = JSON.parse(JSON.stringify(programState));
+    newProgramState.courses[courseIndex].questions[questionIndex].questionString = event.target.value;
+    setProgramState(newProgramState);
+  }
+
+  const handleAnswerStringChange = (courseIndex, questionIndex) => (answerIndex) => (event) => {
+    const newProgramState = JSON.parse(JSON.stringify(programState));
+    newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].answerString = event.target.value;
+    setProgramState(newProgramState);
   }
 
   if (programState.admin) {
@@ -158,6 +174,7 @@ const App = () => {
             <AdminCourseSelectionList 
               courses={programState.courses}
               handleCourseSelection={handleCourseSelection}
+              handleCourseNameChange={handleCourseNameChange}
               handleCourseAddition={handleCourseAddition}
               handleCourseDeletion={handleCourseDeletion}
             />
@@ -169,6 +186,8 @@ const App = () => {
               handleQuestionAdding={handleQuestionAdding}
               handleQuestionDeletion={handleQuestionDeletion}
               handleAnswerCorrectnessSetting={handleAnswerCorrectnessSetting}
+              handleQuestionStringChange={handleQuestionStringChange}
+              handleAnswerStringChange={handleAnswerStringChange}
             />
           </>}
         </main>

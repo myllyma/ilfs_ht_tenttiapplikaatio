@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button';
 import AdminQuestion from './AdminQuestion';
 
 // Admin version of CourseContents that implements functionality to add and delete questions.
-const AdminCourseContents = ({course, activeCourse, handleQuestionAdding, handleQuestionDeletion, handleAnswerAdding, handleAnswerDeletion, handleAnswerCorrectnessSetting}) => {
+const AdminCourseContents = ({course, activeCourse, handleQuestionAdding, handleQuestionDeletion, handleAnswerAdding, handleAnswerDeletion, handleAnswerCorrectnessSetting, handleQuestionStringChange, handleAnswerStringChange}) => {
   console.log("course:", course);
   return(
     <div className="CourseExamQuestions">
@@ -16,6 +16,8 @@ const AdminCourseContents = ({course, activeCourse, handleQuestionAdding, handle
               handleAnswerAdding={handleAnswerAdding(activeCourse, questionIndex)}
               handleAnswerDeletion={handleAnswerDeletion(activeCourse, questionIndex)}
               handleAnswerCorrectnessSetting={handleAnswerCorrectnessSetting(activeCourse, questionIndex)}
+              handleQuestionStringChange={handleQuestionStringChange(activeCourse, questionIndex)}
+              handleAnswerStringChange={handleAnswerStringChange(activeCourse, questionIndex)}
             />
             <Button onClick={handleQuestionDeletion(activeCourse, questionIndex)}>Delete</Button>
             </>

@@ -2,22 +2,23 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 
-const AdminQuestion = ({question, handleAnswerAdding, handleAnswerDeletion, handleAnswerCorrectnessSetting}) => {
+const AdminQuestion = ({question, handleAnswerAdding, handleAnswerDeletion, handleAnswerCorrectnessSetting, handleQuestionStringChange, handleAnswerStringChange}) => {
+  console.log("admin questions: question:", question);
   return (
     <div>
       <Paper className="Question">
         <p>
-          {question.questionString}
+          <input value={question.questionString} onChange={handleQuestionStringChange}></input>
         </p>
         {question.answers.map((answer, answerIndex) => 
           <div key={answer.id}>
             <Checkbox 
               color="primary" 
               onChange={handleAnswerCorrectnessSetting(answerIndex)} 
-              checked={answer.checked} 
+              checked={answer.isCorrectAnswer} 
               readOnly={true}
             />
-            {answer.answerString}
+            <input value={answer.answerString} onChange={handleAnswerStringChange(answerIndex)}></input>
             <Button onClick={handleAnswerDeletion(answerIndex)}>Delete</Button>
           </div>
         )}
