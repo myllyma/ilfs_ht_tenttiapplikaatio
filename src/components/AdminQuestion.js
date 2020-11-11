@@ -1,7 +1,8 @@
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 
-const AdminQuestions = ({question, handleAnswerCorrectnessSetting, removeQuestion, addQuestion}) => {
+const AdminQuestion = ({question, handleAnswerAdding, handleAnswerDeletion, handleAnswerCorrectnessSetting}) => {
   return (
     <div>
       <Paper className="Question">
@@ -17,11 +18,13 @@ const AdminQuestions = ({question, handleAnswerCorrectnessSetting, removeQuestio
               readOnly={true}
             />
             {answer.answerString}
+            <Button onClick={handleAnswerDeletion(answerIndex)}>Delete</Button>
           </div>
         )}
+        <Button onClick={handleAnswerAdding}>Add answer</Button>
       </Paper>
     </div>
   );
 }
 
-export default AdminQuestions;
+export default AdminQuestion;

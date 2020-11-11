@@ -5,7 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 const Question = ({question, showAnswers, handleAnswerSelection}) => {
   let showCorrectAnswerMark = true;
   question.answers.forEach((userAnswer) => { 
-      if (userAnswer.checked !== userAnswer.correctAnswer) {
+      if (userAnswer.isChecked !== userAnswer.isCorrectAnswer) {
         showCorrectAnswerMark = false;
       }
     });
@@ -21,13 +21,13 @@ const Question = ({question, showAnswers, handleAnswerSelection}) => {
             <Checkbox 
               color="primary" 
               onChange={handleAnswerSelection(answerIndex)} 
-              checked={question.answers[answerIndex].checked} 
+              checked={answer.isChecked} 
               readOnly={true}
             />
             {showAnswers && 
               <Checkbox 
                 color="secondary" 
-                checked={question.answers[answerIndex].correctAnswer} 
+                checked={answer.isCorrectAnswer} 
                 readOnly={true}
               />
             }

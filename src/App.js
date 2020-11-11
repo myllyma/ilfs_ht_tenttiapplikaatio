@@ -1,7 +1,7 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-import UIDGenerator from 'uid-generator';
+import uuid from 'react-uuid'
 import Header from './components/Header';
 import CourseSelectionList from './components/CourseSelectionList';
 import CourseContents from './components/CourseContents';
@@ -18,7 +18,6 @@ const App = () => {
       .then((response) => {
         const newProgramState = {};
         newProgramState.activeCourse = 0;
-        newProgramState.UIDGenerator = new UIDGenerator();
         newProgramState.showAnswers = false;
         newProgramState.admin = false;
         newProgramState.courses = response.data.map((course) => ({
@@ -28,11 +27,11 @@ const App = () => {
             answers: question.answers.map((answer) => ({
               ...answer,
               isChecked: false,
-              id: newProgramState.UIDGenerator.generateSync()
+              id: uuid()
             })),
-            id: newProgramState.UIDGenerator.generateSync()
+            id: uuid()
           })),
-          id: newProgramState.UIDGenerator.generateSync()
+          id: uuid()
         }));
         setProgramState(newProgramState);
         console.log("after: newProgramState: ", newProgramState);
@@ -51,8 +50,8 @@ const App = () => {
   // Functionality to handle checkbox selection functionality for user answers
   const handleAnswerSelection = (courseIndex, questionIndex) => (answerIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
-    newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].checked = 
-      !newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].checked;
+    newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isChecked = 
+      !newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isChecked;
     setProgramState(newProgramState);
   }
 
@@ -63,23 +62,26 @@ const App = () => {
     setProgramState(newProgramState);
   }
 
+  // Switch between user and admin modes
   const handleAdminClick = () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.admin = !programState.admin;
     setProgramState(newProgramState);
   }
 
+  // Add a course *ADMIN*
   const handleCourseAddition = () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     const newCourse = {
       courseName: "",
       questions: []
     };
-    newCourse.id = programState.UIDGenerator.generateSync();
+    newCourse.id = uuid();
     newProgramState.courses.concat(newCourse);
     setProgramState(newProgramState);
   }
 
+  // Remove a course *ADMIN*
   const handleCourseDeletion = (courseIndex) => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses = 
@@ -87,17 +89,19 @@ const App = () => {
     setProgramState(newProgramState);
   }
 
+  // Add question from a course *ADMIN*
   const handleQuestionAdding = (courseIndex) => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     const newQuestion = {
       questionString: "",
       answers: []
     };
-    newQuestion.id = programState.UIDGenerator.generateSync();
+    newQuestion.id = uuid();
     newProgramState.courses[courseIndex].questions.concat(newQuestion);
     setProgramState(newProgramState);
   }
 
+  // Remove question from a course *ADMIN*
   const handleQuestionDeletion = (courseIndex, questionIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions = 
@@ -105,6 +109,7 @@ const App = () => {
     setProgramState(newProgramState);
   }
 
+  // Add an answer to a question *ADMIN*
   const handleAnswerAdding = (courseIndex, questionIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     const newAnswer = {
@@ -116,6 +121,7 @@ const App = () => {
     setProgramState(newProgramState);
   }
 
+  // Delete an answer from a question *ADMIN*
   const handleAnswerDeletion = (courseIndex, questionIndex) => (answerIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions[questionIndex].answers = 
@@ -123,6 +129,7 @@ const App = () => {
     setProgramState(newProgramState);
   }
 
+  // Toggle the state of an answer's correctness *ADMIN*
   const handleAnswerCorrectnessSetting = (courseIndex, questionIndex) => (answerIndex) => () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrect = 
@@ -146,8 +153,6 @@ const App = () => {
             <AdminCourseContents
               course={programState.courses[programState.activeCourse]}
               activeCourse={programState.activeCourse}
-              showAnswers={programState.showAnswers}
-              handleAnswerSelection={handleAnswerSelection}
               handleAnswerAdding={handleAnswerAdding}
               handleAnswerDeletion={handleAnswerDeletion}
               handleQuestionAdding={handleQuestionAdding}

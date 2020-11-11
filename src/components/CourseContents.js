@@ -9,9 +9,8 @@ const CourseContents = ({course, activeCourse, showAnswers, handleAnswerSelectio
         {course.questions.map((question, questionIndex) => {
           return(
             <Questions
-              key={course.questions[questionIndex].id}
+              key={question.id}
               question={question}
-              programState={course.questions[questionIndex]}
               showAnswers={showAnswers}
               handleAnswerSelection={handleAnswerSelection(activeCourse, questionIndex)}
             />
