@@ -3,6 +3,7 @@ import AdminQuestion from './AdminQuestion';
 
 // Admin version of CourseContents that implements functionality to add and delete questions.
 const AdminCourseContents = ({course, activeCourse, handleQuestionAdding, handleQuestionDeletion, handleAnswerAdding, handleAnswerDeletion, handleAnswerCorrectnessSetting}) => {
+  console.log("course:", course);
   return(
     <div className="CourseExamQuestions">
       <div className="ExamQuestions">

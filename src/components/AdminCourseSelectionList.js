@@ -11,8 +11,9 @@ const AdminCourseSelectionList = ({courses, handleCourseSelection, handleCourseA
         onClick={handleCourseSelection(courseIndex)
       }>
         {course.courseName}
-      </Button>
+      </Button> 
       )}
+      <Button onClick={handleCourseAddition}>Add course</Button>
     </div>
   );
 }
