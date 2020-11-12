@@ -121,10 +121,11 @@ const App = () => {
   }
 
   // Delete an answer from a question *ADMIN*
-  const handleAnswerDeletion = (courseIndex, questionIndex) => (answerIndex) => () => {
+  const handleAnswerDeletion = (courseIndex, questionIndex) => (answerIndex) => async () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions[questionIndex].answers.splice(answerIndex, 1);
     setProgramState(newProgramState);
+    await axios.delete(`http://localhost:3001/courses/${courseIndex}/questions/${questionIndex}/answers/${answerIndex}`);
   }
 
   // Toggle the state of an answer's correctness *ADMIN*
@@ -135,21 +136,21 @@ const App = () => {
     setProgramState(newProgramState);
   }
 
-  // Allows modification of a course's name
+  // Allows modification of a course's name *ADMIN*
   const handleCourseNameChange = (courseIndex) => (event) => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].courseName = event.target.value;
     setProgramState(newProgramState);
   }
 
-  // Allows modification of question's contents
+  // Allows modification of question's contents *ADMIN*
   const handleQuestionStringChange = (courseIndex, questionIndex) => (event) => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions[questionIndex].questionString = event.target.value;
     setProgramState(newProgramState);
   }
 
-  // Allows modification of answer's string
+  // Allows modification of answer's string *ADMIN*
   const handleAnswerStringChange = (courseIndex, questionIndex) => (answerIndex) => (event) => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].answerString = event.target.value;
