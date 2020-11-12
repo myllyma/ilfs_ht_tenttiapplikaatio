@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 
 const AdminQuestion = ({question, handleAnswerAdding, handleAnswerDeletion, handleAnswerCorrectnessSetting, handleQuestionStringChange, handleAnswerStringChange}) => {
-  console.log("admin questions: question:", question);
   return (
     <div>
       <Paper className="Question">
@@ -16,7 +15,6 @@ const AdminQuestion = ({question, handleAnswerAdding, handleAnswerDeletion, hand
               color="primary" 
               onChange={handleAnswerCorrectnessSetting(answerIndex)} 
               checked={answer.isCorrectAnswer} 
-              readOnly={true}
             />
             <input value={answer.answerString} onChange={handleAnswerStringChange(answerIndex)}></input>
             <Button onClick={handleAnswerDeletion(answerIndex)}>Delete</Button>

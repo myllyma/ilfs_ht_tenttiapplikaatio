@@ -34,7 +34,6 @@ const App = () => {
           id: uuid()
         }));
         setProgramState(newProgramState);
-        console.log("after: newProgramState: ", newProgramState);
       }
     );                  
   }, []);
@@ -45,7 +44,6 @@ const App = () => {
     newProgramState.activeCourse = courseIndex;
     newProgramState.showAnswers = false;
     setProgramState(newProgramState);
-    console.log("Executed handleCourseSelection");
   }
 
   // Functionality to handle checkbox selection functionality for user answers
@@ -54,7 +52,6 @@ const App = () => {
     newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isChecked = 
       !newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isChecked;
     setProgramState(newProgramState);
-    console.log("Executed handleAnswerSelection");
   }
 
   // Functionality to finish answering and move to check for correctness
@@ -62,7 +59,6 @@ const App = () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.showAnswers = true;
     setProgramState(newProgramState);
-    console.log("Executed handleFinishAnswering");
   }
 
   // Switch between user and admin modes
@@ -70,7 +66,6 @@ const App = () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.admin = !programState.admin;
     setProgramState(newProgramState);
-    console.log("Executed handleAdminClick");
   }
 
   // Add a course *ADMIN*
@@ -83,7 +78,6 @@ const App = () => {
     newCourse.id = uuid();
     newProgramState.courses = newProgramState.courses.concat(newCourse);
     setProgramState(newProgramState);
-    console.log("Executed handleCourseAddition");
   }
 
   // Remove a course *ADMIN*
@@ -91,7 +85,6 @@ const App = () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses.splice(courseIndex, 1);
     setProgramState(newProgramState);
-    console.log("Executed handleCourseDeletion");
   }
 
   // Add question from a course *ADMIN*
@@ -104,7 +97,6 @@ const App = () => {
     newQuestion.id = uuid();
     newProgramState.courses[courseIndex].questions = newProgramState.courses[courseIndex].questions.concat(newQuestion);
     setProgramState(newProgramState);
-    console.log("Executed handleQuestionAdding");
   }
 
   // Remove question from a course *ADMIN*
@@ -112,7 +104,6 @@ const App = () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions.splice(questionIndex, 1);
     setProgramState(newProgramState);
-    console.log("Executed handleQuestionDeletion");
   }
 
   // Add an answer to a question *ADMIN*
@@ -120,13 +111,13 @@ const App = () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     const newAnswer = {
       answerString: "",
-      correctAnswer: false
+      isCorrectAnswer: false,
+      isChecked: false
     };
     newAnswer.id = uuid();
     newProgramState.courses[courseIndex].questions[questionIndex].answers =
       newProgramState.courses[courseIndex].questions[questionIndex].answers.concat(newAnswer);
     setProgramState(newProgramState);
-    console.log("Executed handleAnswerAdding, newAnswer:", newAnswer);
   }
 
   // Delete an answer from a question *ADMIN*
@@ -134,7 +125,6 @@ const App = () => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions[questionIndex].answers.splice(answerIndex, 1);
     setProgramState(newProgramState);
-    console.log("Executed handleAnswerDeletion");
   }
 
   // Toggle the state of an answer's correctness *ADMIN*
@@ -143,21 +133,23 @@ const App = () => {
     newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrectAnswer = 
       !newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrectAnswer;
     setProgramState(newProgramState);
-    console.log("Executed handleAnswerCorrectnessSetting: courseIndex:", courseIndex, "questionIndex:", questionIndex, "answerIndex", answerIndex, "isCorrect:", newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrect);
   }
 
+  // Allows modification of a course's name
   const handleCourseNameChange = (courseIndex) => (event) => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].courseName = event.target.value;
     setProgramState(newProgramState);
   }
 
+  // Allows modification of question's contents
   const handleQuestionStringChange = (courseIndex, questionIndex) => (event) => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions[questionIndex].questionString = event.target.value;
     setProgramState(newProgramState);
   }
 
+  // Allows modification of answer's string
   const handleAnswerStringChange = (courseIndex, questionIndex) => (answerIndex) => (event) => {
     const newProgramState = JSON.parse(JSON.stringify(programState));
     newProgramState.courses[courseIndex].questions[questionIndex].answers[answerIndex].answerString = event.target.value;
