@@ -1,0 +1,161 @@
+{
+  "courses": [
+    {
+      "courseName": "testikurssi 1",
+      "questions": [
+        {
+          "questionString": "testikysymys 1" ,
+          "answers": [
+            {
+              "answerString": "testivastaus 1",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 2",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 3",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 4",
+              "isCorrectAnswer": true
+            }
+          ]
+        },
+        {
+          "questionString": "testikysymys 2" ,
+          "answers": [
+            {
+              "answerString": "testivastaus 1",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 2",
+              "isCorrectAnswer": false
+            },
+            {
+              "answerString": "testivastaus 3",
+              "isCorrectAnswer": false
+            },
+            {
+              "answerString": "testivastaus 4",
+              "isCorrectAnswer": false
+            }
+          ]
+        },
+        {
+          "questionString": "testikysymys 3" ,
+          "answers": [
+            {
+              "answerString": "testivastaus 1",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 2",
+              "isCorrectAnswer": false
+            },
+            {
+              "answerString": "testivastaus 3",
+              "isCorrectAnswer": false
+            },
+            {
+              "answerString": "testivastaus 4",
+              "isCorrectAnswer": false
+            }
+          ]
+        },
+        {
+          "questionString": "testikysymys 4" ,
+          "answers": [
+            {
+              "answerString": "testivastaus 1",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 2",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 3",
+              "isCorrectAnswer": false
+            },
+            {
+              "answerString": "testivastaus 4",
+              "isCorrectAnswer": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseName": "testikurssi 2",
+      "questions": [
+        {
+          "questionString": "testikysymys 5",
+          "answers": [
+            {
+              "answerString": "testivastaus 1",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 2",
+              "isCorrectAnswer": false
+            },
+            {
+              "answerString": "testivastaus 3",
+              "isCorrectAnswer": false
+            },
+            {
+              "answerString": "testivastaus 4",
+              "isCorrectAnswer": false
+            }
+          ]
+        },
+        {
+          "questionString": "testikysymys 6" ,
+          "answers": [
+            {
+              "answerString": "testivastaus 1",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 2",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 3",
+              "isCorrectAnswer": false
+            },
+            {
+              "answerString": "testivastaus 4",
+              "isCorrectAnswer": false
+            }
+          ]
+        },
+        {
+          "questionString": "testikysymys 7" ,
+          "answers": [
+            {
+              "answerString": "testivastaus 1",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 2",
+              "isCorrectAnswer": true
+            },
+            {
+              "answerString": "testivastaus 3",
+              "isCorrectAnswer": false
+            },
+            {
+              "answerString": "testivastaus 4",
+              "isCorrectAnswer": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
