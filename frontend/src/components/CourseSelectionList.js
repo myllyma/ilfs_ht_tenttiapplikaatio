@@ -1,18 +1,17 @@
+import {useContext} from 'react';
+import {Context} from '../utility/provider.js';
 import Button from '@material-ui/core/Button';
+import {switchCourse} from '../utility/callbacks';
 
-// Display the list of available course
-const CourseSelectionList = ({courses, handleCourseSelection}) => {
+const CourseSelectionList = () => {
+  const {state, dispatch} = useContext(Context);
+
   return (
-    <div className="CourseSelectionList">
-      {courses.map((course, courseIndex) => 
-      <Button 
-        key={course.id} 
-        color="primary" 
-        className="CourseSelectionListItem" 
-        onClick={handleCourseSelection(courseIndex)
-      }>
-        {course.courseName}
-      </Button>
+    <div>
+      {state.courses.map((course, courseIndex) => 
+        <Button key={course.id} color="primary" className="CourseSelectionListItem" onClick={switchCourse(dispatch, courseIndex)}>
+          {course.courseName}
+        </Button>
       )}
     </div>
   );

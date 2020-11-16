@@ -14,7 +14,7 @@ server.get("/api/courses/:courseIndex/questions/:questionIndex/answers/:answerIn
   const answerIndex = req.params.answerIndex;
   console.log(`Received a call to courses[${courseIndex}].questions[${questionIndex}].answers[${answerIndex}]`);
 
-  res.json({answer:"fuck you"});
+  res.json({answer:"hello"});
 })
 
 const PORT = 3001;

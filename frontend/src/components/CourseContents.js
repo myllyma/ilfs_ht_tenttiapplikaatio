@@ -1,24 +1,20 @@
+import {useContext} from 'react';
+import {Context} from '../utility/provider.js';
 import Button from '@material-ui/core/Button';
 import Questions from './Question';
+import {userTogglesDoneWithAnswering} from '../utility/callbacks';
 
-// Displays the data for one course's exam
-const CourseContents = ({course, activeCourse, showAnswers, handleAnswerSelection, handleFinishAnswering}) => {
+const CourseContents = () => {
+  const {state, dispatch} = useContext(Context);
+
   return(
-    <div className="CourseExamQuestions">
-      <div className="ExamQuestions">
-        {course.questions.map((question, questionIndex) => {
-          return(
-            <Questions
-              key={question.id}
-              question={question}
-              showAnswers={showAnswers}
-              handleAnswerSelection={handleAnswerSelection(activeCourse, questionIndex)}
-            />
-          )
-        }
+    <div>
+      <div>
+        {state.courses[state.activeCourse].questions.map((question, questionIndex) => 
+            <Questions key={question.id} courseIndex={state.activeCourse} questionIndex={questionIndex}/>
         )}
       </div>
-      {!showAnswers && <Button variant="contained" color="primary" onClick={handleFinishAnswering}>Näytä vastaukset</Button>}
+      {!state.showAnswers && <Button variant="contained" color="primary" onClick={userTogglesDoneWithAnswering(dispatch)}>Näytä vastaukset</Button>}
     </div>
   );
 }
