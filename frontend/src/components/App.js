@@ -1,6 +1,5 @@
 import {useContext, useEffect} from 'react';
 import axios from 'axios';
-import uuid from 'react-uuid'
 import '../css/App.css';
 import Header from '../components/Header';
 import CourseSelectionList from '../components/CourseSelectionList';
@@ -14,7 +13,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/courses')
+      .get('http://localhost:3001/api/courses')
       .then((response) => {
         const newProgramState = {};
         newProgramState.activeCourse = 0;
@@ -27,16 +26,15 @@ const App = () => {
             answers: question.answers.map((answer) => ({
               ...answer,
               isChecked: false,
-              id: uuid()
             })),
-            id: uuid()
           })),
-          id: uuid()
         }));
         dispatch({type: "INIT", payload: newProgramState});
       }
     );                  
   }, [dispatch]);
+
+  console.log(state);
 
   return (
     state.courses ?
