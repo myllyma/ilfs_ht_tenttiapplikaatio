@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import {Context} from '../utility/provider.js';
-import {inputQuestionContent, toggleAnswerCorrectness, inputAnswerContent, deleteAnswer, addAnswer} from '../utility/callbacks';
+import {inputQuestionContent, toggleAnswerCorrectness, inputAnswerContent, inputQuestionCategory, deleteAnswer, addAnswer} from '../utility/callbacks';
 
 const AdminQuestion = ({courseIndex, questionIndex}) => {
   const {state, dispatch} = useContext(Context);
@@ -12,7 +12,10 @@ const AdminQuestion = ({courseIndex, questionIndex}) => {
     <div>
       <Paper>
         <p>
+          Kysymys
           <input value={state.courses[courseIndex].questions[questionIndex].questionString} onChange={inputQuestionContent(dispatch, courseIndex, questionIndex)}></input>
+          Kategoria
+          <input value={state.courses[courseIndex].questions[questionIndex].category} onChange={inputQuestionCategory(dispatch, courseIndex, questionIndex)}></input>
         </p>
         {state.courses[courseIndex].questions[questionIndex].answers.map((answer, answerIndex) => 
           <div key={answer.id}>

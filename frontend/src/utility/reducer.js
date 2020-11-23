@@ -20,6 +20,10 @@ const reducer = (state, action) => {
     case "TOGGLE_ADMIN":
       newProgramState.admin = !state.admin;
       return(newProgramState);
+    
+    case "TOGGLE_PAGE":
+      newProgramState.visiblePage = action.page;
+      return(newProgramState);
 
     case "ADD_COURSE":
       const newCourse = {
@@ -74,6 +78,10 @@ const reducer = (state, action) => {
 
     case "INPUT_QUESTION_CONTENT":
       newProgramState.courses[action.courseIndex].questions[action.questionIndex].questionString = action.newQuestionString;
+      return(newProgramState);
+
+    case "INPUT_QUESTION_CATEGORY":
+      newProgramState.courses[action.courseIndex].questions[action.questionIndex].category = action.newCategory;
       return(newProgramState);
 
     case "INPUT_ANSWER_CONTENT":

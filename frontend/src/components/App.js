@@ -7,6 +7,7 @@ import CourseContents from '../components/CourseContents';
 import AdminCourseSelectionList from '../components/AdminCourseSelectionList';
 import AdminCourseContents from '../components/AdminCourseContents';
 import {Context} from '../utility/provider.js';
+import Visualization from './Visualization';
 
 const App = () => {
   const {state, dispatch} = useContext(Context);
@@ -19,6 +20,7 @@ const App = () => {
         newProgramState.activeCourse = 0;
         newProgramState.showAnswers = false;
         newProgramState.admin = false;
+        newProgramState.visiblePage = "EXAMS";
         newProgramState.courses = response.data.map((course) => ({
           ...course,
           questions: course.questions.map((question) => ({
@@ -34,29 +36,52 @@ const App = () => {
     );                  
   }, [dispatch]);
 
-  console.log(state);
+  console.log("Program state: ", state);
 
-  return (
-    state.courses ?
-    <div className="App">
-      <Header/>
-      <main className="mainContent">
-        {
-        state.admin ?
-        <>
-          <CourseSelectionList/>
-          <CourseContents/>
-        </>
-        :
-        <>
-          <AdminCourseSelectionList/>
-          <AdminCourseContents/>
-        </>}
-      </main>
-    </div>
-    :
-    <div></div>
-  );
+  if (!state.courses) {
+    return(
+      <div>
+        <Header/>
+      </div>
+    );
+  }
+
+  switch (state.visiblePage) {
+    case "EXAMS":
+      return (
+        <div className="App">
+          <Header/>
+          <main className="mainContent">
+            {!state.admin ?
+            <>
+              <CourseSelectionList/>
+              <CourseContents/>
+            </>
+            :
+            <>
+              <AdminCourseSelectionList/>
+              <AdminCourseContents/>
+            </>}
+          </main>
+        </div>
+      );
+    case "VISUALIZATION":
+      return (
+        <div className="App">
+          <Header/>
+          <main className="mainContent">
+            <Visualization/>
+          </main>
+        </div>
+      );
+    default:
+      return(
+        <div>
+          <Header/>
+        </div>
+      );
+  }
+  
 }
 
 export default App;

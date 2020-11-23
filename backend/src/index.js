@@ -117,6 +117,7 @@ server.post("/api/courses/:courseIndex/questions/", (req, res) => {
   const newQuestion = {
     questionString: "",
     answers: [],
+    category: "",
     id: uuid()
   };
   console.log(`Received a POST call to courses[${courseIndex}].questions`);

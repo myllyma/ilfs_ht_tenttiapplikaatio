@@ -52,7 +52,8 @@
               "id": "3770b12-0d76-311d-bb27-0dcde148c3e6"
             }
           ],
-          "id": "b2de5-b383-158-5236-1ea0c04e834"
+          "id": "b2de5-b383-158-5236-1ea0c04e834",
+          "category": "kategoria 1"
         },
         {
           "questionString": "testikysymys 2",
@@ -78,7 +79,8 @@
               "id": "d2ff1c8-2154-bdfd-e885-1cb6f0a8fdb4"
             }
           ],
-          "id": "345d68-f350-831f-2173-42af4f147f4"
+          "id": "345d68-f350-831f-2173-42af4f147f4",
+          "category": "kategoria 1"
         },
         {
           "questionString": "testikysymys 3",
@@ -104,7 +106,8 @@
               "id": "41124b-7a5-b678-537b-cb2fbeef3b81"
             }
           ],
-          "id": "1a71bb5-7e25-048-8b4b-c85f6ea563a"
+          "id": "1a71bb5-7e25-048-8b4b-c85f6ea563a",
+          "category": "kategoria 2"
         },
         {
           "questionString": "testikysymys 4",
@@ -130,12 +133,14 @@
               "id": "cb0e465-4670-63d7-b21-5eb6acee7c7"
             }
           ],
-          "id": "d228e20-6fd7-e4ef-1fdd-c3207e5cbb7"
+          "id": "d228e20-6fd7-e4ef-1fdd-c3207e5cbb7",
+          "category": "kategoria 2"
         },
         {
           "questionString": "",
           "answers": [],
-          "id": "1e0b47b-dedd-f48-246c-fc30f2510b"
+          "id": "1e0b47b-dedd-f48-246c-fc30f2510b",
+          "category": "kategoria 1"
         }
       ],
       "id": "1575e2-61-7a53-ab0d-bd740fc0350"
@@ -167,7 +172,8 @@
               "id": "caca384-e4b6-1c4b-dae0-0ec5da7e34"
             }
           ],
-          "id": "2b46a7-80d5-55b8-054f-ad82cfba8ad0"
+          "id": "2b46a7-80d5-55b8-054f-ad82cfba8ad0",
+          "category": "kategoria 1"
         },
         {
           "questionString": "testikysymys 6",
@@ -193,7 +199,8 @@
               "id": "fbacae3-5018-c347-426a-5bf86a5ba7a"
             }
           ],
-          "id": "beec43f-7ebf-0f03-6551-da4436cc243"
+          "id": "beec43f-7ebf-0f03-6551-da4436cc243",
+          "category": "kategoria 3"
         },
         {
           "questionString": "testikysymys 7",
@@ -219,7 +226,8 @@
               "id": "b776550-55cc-7b2b-0820-8ccf53b1d"
             }
           ],
-          "id": "1d224b5-27ab-b5ab-f76e-7e2d7e37e25"
+          "id": "1d224b5-27ab-b5ab-f76e-7e2d7e37e25",
+          "category": "kategoria 3"
         }
       ],
       "id": "d778ab5-8d44-bcf8-8e5a-36433ce3104e"

@@ -14,6 +14,10 @@ const toggleAdmin = (dispatch) => ()  => {
   dispatch({type: "TOGGLE_ADMIN"});
 }
 
+const togglePage = (dispatch, page) => () => {
+  dispatch({type: "TOGGLE_PAGE", page});
+}
+
 const addCourse = (dispatch) => () => {
   dispatch({type: "ADD_COURSE"});
 }
@@ -43,11 +47,15 @@ const toggleAnswerCorrectness = (dispatch, courseIndex, questionIndex, answerInd
 }
 
 const inputCourseName = (dispatch, courseIndex) => (event)  => {
-  dispatch({type: "INPUT_QUESTION_CONTENT", newCourseNameString: event.target.value, courseIndex});
+  dispatch({type: "INPUT_COURSE_NAME", newCourseNameString: event.target.value, courseIndex});
 }
 
 const inputQuestionContent = (dispatch, courseIndex, questionIndex) => (event) => {
   dispatch({type: "INPUT_QUESTION_CONTENT", newQuestionString: event.target.value, courseIndex, questionIndex});
+}
+
+const inputQuestionCategory = (dispatch, courseIndex, questionIndex) => (event) => {
+  dispatch({type: "INPUT_QUESTION_CATEGORY", newCategory: event.target.value, courseIndex, questionIndex});
 }
 
 const inputAnswerContent = (dispatch, courseIndex, questionIndex, answerIndex) => (event) => {
@@ -59,6 +67,7 @@ export {switchCourse,
         userTogglesAnswer,
         userTogglesDoneWithAnswering,
         toggleAdmin,
+        togglePage,
         addCourse,
         addQuestion,
         addAnswer,
@@ -68,5 +77,6 @@ export {switchCourse,
         toggleAnswerCorrectness,
         inputCourseName,
         inputQuestionContent,
+        inputQuestionCategory,
         inputAnswerContent
       };
