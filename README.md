@@ -2,7 +2,7 @@
 
 A testing and development version of both the frontend and backend can be executed with:
 
-## `npm start`
+`npm start`
 
 -command in their respective directories.
 
