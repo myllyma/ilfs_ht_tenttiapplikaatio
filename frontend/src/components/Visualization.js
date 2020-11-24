@@ -5,7 +5,7 @@ import {Polar} from 'react-chartjs-2';
 const data = {
   datasets: [{
     data: [
-      (11/15 * 100).toFixed(2),
+      (15/15 * 100).toFixed(2),
       (13/15 * 100).toFixed(2),
       (7/15 * 100).toFixed(2),
       (3/15 * 100).toFixed(2),

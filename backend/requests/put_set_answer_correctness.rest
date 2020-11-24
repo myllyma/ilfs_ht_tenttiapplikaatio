@@ -1,0 +1,6 @@
+PUT http://localhost:3001/api/courses/0/questions/0/answers/0/changecorrectness
+Content-Type: application/json
+
+{
+  "isCorrectAnswer": false
+}

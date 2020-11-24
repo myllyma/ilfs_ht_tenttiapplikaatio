@@ -1,22 +1,21 @@
-import {useContext, useEffect} from 'react';
-import axios from 'axios';
 import '../css/App.css';
+import axios from 'axios';
 import Header from '../components/Header';
+import {useContext, useEffect} from 'react';
+import {Context} from '../utility/provider.js';
 import CourseSelectionList from '../components/CourseSelectionList';
 import CourseContents from '../components/CourseContents';
 import AdminCourseSelectionList from '../components/AdminCourseSelectionList';
 import AdminCourseContents from '../components/AdminCourseContents';
-import {Context} from '../utility/provider.js';
 import Visualization from './Visualization';
 
 const App = () => {
   const {state, dispatch} = useContext(Context);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/api/courses')
-      .then((response) => {
-        const newProgramState = {};
+    (async () => {
+      const response = await axios.get(`http://localhost:3001/api/courses`);
+      const newProgramState = {};
         newProgramState.activeCourse = 0;
         newProgramState.showAnswers = false;
         newProgramState.admin = false;
@@ -32,8 +31,7 @@ const App = () => {
           })),
         }));
         dispatch({type: "INIT", payload: newProgramState});
-      }
-    );                  
+    })();                  
   }, [dispatch]);
 
   console.log("Program state: ", state);
@@ -65,7 +63,8 @@ const App = () => {
           </main>
         </div>
       );
-    case "VISUALIZATION":
+
+     case "VISUALIZATION":
       return (
         <div className="App">
           <Header/>
@@ -74,6 +73,7 @@ const App = () => {
           </main>
         </div>
       );
+
     default:
       return(
         <div>

@@ -1,15 +1,15 @@
 {
   "courses": [
     {
-      "courseName": "testikurssi 1",
+      "courseName": "testikurssi testi",
       "questions": [
         {
           "questionString": "testikysymys 1",
           "answers": [
             {
-              "answerString": "testivastaus 1",
-              "isCorrectAnswer": true,
-              "id": "d151b0c-82c4-a4f-20b-3d52b754c1a8"
+              "answerString": "testivastaus 1greg",
+              "id": "d151b0c-82c4-a4f-20b-3d52b754c1a8",
+              "isCorrectAnswer": false
             },
             {
               "answerString": "testivastaus 2",
@@ -18,42 +18,18 @@
             },
             {
               "answerString": "testivastaus 3",
-              "isCorrectAnswer": true,
+              "isCorrectAnswer": false,
               "id": "22e2ddd-e8d6-6051-f43-8842f84eaff6"
             },
             {
               "answerString": "testivastaus 4",
               "isCorrectAnswer": true,
               "id": "fdf10f-3067-a88-fcbd-be1fbd144e8"
-            },
-            {
-              "answerString": "",
-              "isCorrectAnswer": false,
-              "id": "7dd5e34-8e1-d814-4bc6-88ad8fd812c"
-            },
-            {
-              "answerString": "",
-              "isCorrectAnswer": false,
-              "id": "73e2f1-2844-dfbe-1242-5533d07eac45"
-            },
-            {
-              "answerString": "",
-              "isCorrectAnswer": false,
-              "id": "c1aef0-260a-c74-fd-a26137f2fd"
-            },
-            {
-              "answerString": "",
-              "isCorrectAnswer": false,
-              "id": "eddf81-ed0f-de4a-285a-ee32314a442"
-            },
-            {
-              "answerString": "",
-              "isCorrectAnswer": false,
-              "id": "3770b12-0d76-311d-bb27-0dcde148c3e6"
             }
           ],
           "id": "b2de5-b383-158-5236-1ea0c04e834",
-          "category": "kategoria 1"
+          "category": "kategoria 1",
+          "newQuestionString": "testikysymys 1 fa"
         },
         {
           "questionString": "testikysymys 2",
@@ -135,12 +111,6 @@
           ],
           "id": "d228e20-6fd7-e4ef-1fdd-c3207e5cbb7",
           "category": "kategoria 2"
-        },
-        {
-          "questionString": "",
-          "answers": [],
-          "id": "1e0b47b-dedd-f48-246c-fc30f2510b",
-          "category": "kategoria 1"
         }
       ],
       "id": "1575e2-61-7a53-ab0d-bd740fc0350"
@@ -231,6 +201,11 @@
         }
       ],
       "id": "d778ab5-8d44-bcf8-8e5a-36433ce3104e"
+    },
+    {
+      "courseName": "",
+      "questions": [],
+      "id": "ae0413-e68b-4b00-1453-d14c75ca7"
     }
   ]
 }
