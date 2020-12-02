@@ -2,5 +2,5 @@ POST http://localhost:3001/api/question/
 Content-Type: application/json
 
 {
-  "examId": "1575e2-61-7a53-ab0d-bd740fc0350"
+  "examId": "10"
 }
