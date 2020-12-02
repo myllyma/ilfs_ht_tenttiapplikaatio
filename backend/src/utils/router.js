@@ -1,13 +1,4 @@
 const router = require("express").Router();
-
-
-const uuid = require("react-uuid");
-const lowdb = require("lowdb");
-const FileSync = require("lowdb/adapters/FileSync");
-const adapter = new FileSync("db.json");
-const db = lowdb(adapter);
-
-
 const {Pool} = require("pg");
 const connectionString = `postgresql://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`
 const pool = new Pool({connectionString});

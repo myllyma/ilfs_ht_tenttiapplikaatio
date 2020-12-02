@@ -11,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
     case "NoContent":
       return res.status(404).send({error: err.errorText}).end();
     case "MalformedRequest":
-      return res.status(400).json({error: err.errorText});
+      return res.status(400).json({error: err.errorText}).end();
   }
 }
 
