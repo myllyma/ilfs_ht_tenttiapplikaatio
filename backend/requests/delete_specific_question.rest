@@ -1,1 +1,7 @@
-DELETE http://localhost:3001/api/courses/0/questions/4
+DELETE http://localhost:3001/api/question/
+Content-Type: application/json
+
+{
+  "examId": "1575e2-61-7a53-ab0d-bd740fc0350",
+  "questionId": "702073-3dc-a4d4-bc1d-67d30c313b"
+}

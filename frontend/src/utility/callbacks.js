@@ -2,12 +2,12 @@ import axios from "axios";
 
 const SERVER_URI = "http://localhost:3001";
 
-const switchCourse = (dispatch, courseIndex) => () => {
-  dispatch({type: "SWITCH_COURSE", courseIndex});
+const switchExam = (dispatch, examIndex) => () => {
+  dispatch({type: "SWITCH_EXAM", examIndex});
 }
 
-const userTogglesAnswer = (dispatch, courseIndex, questionIndex, answerIndex) => ()  => {
-  dispatch({type: "USER_TOGGLES_ANSWER", courseIndex, questionIndex, answerIndex});
+const userTogglesAnswer = (dispatch, examIndex, questionIndex, answerIndex) => ()  => {
+  dispatch({type: "USER_TOGGLES_ANSWER", examIndex, questionIndex, answerIndex});
 }
 
 const userTogglesDoneWithAnswering = (dispatch) => ()  => {
@@ -22,182 +22,189 @@ const togglePage = (dispatch, page) => () => {
   dispatch({type: "TOGGLE_PAGE", page});
 }
 
-const addCourse = (dispatch) => () => {
+// -----------------------------------
+// Exam related callbacks
+// -----------------------------------
+
+const addExam = (dispatch) => () => {
+  let response = {};
+  (async () => {
+    try {
+      response = await axios.post(`${SERVER_URI}/api/exams/`);
+    } catch (error) {
+      return;
+    }
+    console.log(response.data);
+  })()
+
+  dispatch({type: "ADD_EXAM", examId: response.data.id});
+}
+
+const deleteExam = (dispatch, examIndex) => ()  => {
   (async () => {
     let response = {};
     try {
-      response = await axios.post(`${SERVER_URI}/api/courses/`);
-      console.log("Server response: ", response);
+      response = await axios.delete(`${SERVER_URI}/api/exams/${examIndex}`);
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
+    console.log(response.data);
   })()
 
-  dispatch({type: "ADD_COURSE"});
+  dispatch({type: "DELETE_EXAM", examIndex});
 }
 
-const addQuestion = (dispatch, courseIndex) => () => {
+const inputExamName = (dispatch, examIndex) => (event)  => {
   (async () => {
     let response = {};
     try {
-      response = await axios.post(`${SERVER_URI}/api/courses/${courseIndex}/questions/`);
-      console.log("Server response: ", response);
+      response = await axios.put(`${SERVER_URI}/api/exams/${examIndex}/`, {newExamName: event.target.value});
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
+    console.log(response.data);
   })()
 
-  dispatch({type: "ADD_QUESTION", courseIndex});
+  dispatch({type: "INPUT_EXAM_NAME", newExamNameString: event.target.value, examIndex});
 }
 
-const addAnswer = (dispatch, courseIndex, questionIndex) => ()  => {
+// -----------------------------------
+// Question related callbacks
+// -----------------------------------
+
+const addQuestion = (dispatch, examIndex) => () => {
   (async () => {
     let response = {};
     try {
-      await axios.post(`${SERVER_URI}/api/courses/${courseIndex}/questions/${questionIndex}/answers`);
-      console.log("Server response: ", response);
+      response = await axios.post(`${SERVER_URI}/api/exams/${examIndex}/questions/`);
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
+    console.log(response.data);
   })()
 
-  dispatch({type: "ADD_ANSWER", courseIndex, questionIndex});
+  dispatch({type: "ADD_QUESTION", examIndex});
 }
 
-const deleteCourse = (dispatch, courseIndex) => ()  => {
+const deleteQuestion = (dispatch, examIndex, questionIndex) => () => {
   (async () => {
     let response = {};
     try {
-      response = await axios.delete(`${SERVER_URI}/api/courses/${courseIndex}`);
-      console.log("Server response: ", response);
+      response = await axios.delete(`${SERVER_URI}/api/exams/${examIndex}/questions/${questionIndex}`);
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
+    console.log(response.data);
   })()
 
-  dispatch({type: "DELETE_COURSE", courseIndex});
+  dispatch({type: "DELETE_QUESTION", examIndex, questionIndex});
 }
 
-const deleteQuestion = (dispatch, courseIndex, questionIndex) => () => {
+const inputQuestionContent = (dispatch, examIndex, questionIndex) => (event) => {
   (async () => {
     let response = {};
     try {
-      response = await axios.delete(`${SERVER_URI}/api/courses/${courseIndex}/questions/${questionIndex}`);
-      console.log("Server response: ", response);
+      response = await axios.put(`${SERVER_URI}/api/exams/${examIndex}/questions/${questionIndex}`, {newQuestionString: event.target.value});
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
+    console.log(response.data);
   })()
 
-  dispatch({type: "DELETE_QUESTION", courseIndex, questionIndex});
+  dispatch({type: "INPUT_QUESTION_CONTENT", newQuestionString: event.target.value, examIndex, questionIndex});
 }
 
-const deleteAnswer = (dispatch, courseIndex, questionIndex, answerIndex) => ()  => {
+const inputQuestionCategory = (dispatch, examIndex, questionIndex) => (event) => {
   (async () => {
     let response = {};
     try {
-      response = await axios.delete(`${SERVER_URI}/api/courses/${courseIndex}/questions/${questionIndex}/answers/${answerIndex}`);
-      console.log("Server response: ", response);
+      response = await axios.put(`${SERVER_URI}/api/exams/${examIndex}/questions/${questionIndex}`, {newCategory: event.target.value});
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
+    console.log(response.data);
   })()
 
-  dispatch({type: "DELETE_ANSWER", courseIndex, questionIndex, answerIndex});
+  dispatch({type: "INPUT_QUESTION_CATEGORY", newCategory: event.target.value, examIndex, questionIndex});
 }
 
-const toggleAnswerCorrectness = (dispatch, courseIndex, questionIndex, answerIndex, currentState) => () => {
+// -----------------------------------
+// Answer related callbacks
+// -----------------------------------
+
+const addAnswer = (dispatch, examIndex, questionIndex) => ()  => {
   (async () => {
     let response = {};
     try {
-      response = await axios.put(`${SERVER_URI}/api/courses/${courseIndex}/questions/${questionIndex}/answers/${answerIndex}/`, {newIsCorrectAnswer: !currentState});
-      console.log("Server response: ", response);
+      await axios.post(`${SERVER_URI}/api/exams/${examIndex}/questions/${questionIndex}/answers`);
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
+    console.log(response.data);
   })()
 
-  dispatch({type: "TOGGLE_ANSWER_CORRECTNESS", courseIndex, questionIndex, answerIndex});
+  dispatch({type: "ADD_ANSWER", examIndex, questionIndex});
 }
 
-const inputCourseName = (dispatch, courseIndex) => (event)  => {
+const deleteAnswer = (dispatch, examIndex, questionIndex, answerIndex) => ()  => {
   (async () => {
     let response = {};
     try {
-      response = await axios.put(`${SERVER_URI}/api/courses/${courseIndex}/`, {newCourseName: event.target.value});
-      console.log("Server response: ", response);
+      response = await axios.delete(`${SERVER_URI}/api/exams/${examIndex}/questions/${questionIndex}/answers/${answerIndex}`);
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
-
-    console.log("getting into here")
+    console.log(response.data);
   })()
 
-  dispatch({type: "INPUT_COURSE_NAME", newCourseNameString: event.target.value, courseIndex});
+  dispatch({type: "DELETE_ANSWER", examIndex, questionIndex, answerIndex});
 }
 
-const inputQuestionContent = (dispatch, courseIndex, questionIndex) => (event) => {
+const toggleAnswerCorrectness = (dispatch, examIndex, questionIndex, answerIndex, currentState) => () => {
   (async () => {
     let response = {};
     try {
-      response = await axios.put(`${SERVER_URI}/api/courses/${courseIndex}/questions/${questionIndex}`, {newQuestionString: event.target.value});
-      console.log("Server response: ", response);
+      response = await axios.put(`${SERVER_URI}/api/exams/${examIndex}/questions/${questionIndex}/answers/${answerIndex}/`, {newIsCorrectAnswer: !currentState});
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
-
-    console.log("getting into here")
+    console.log(response.data);
   })()
 
-  dispatch({type: "INPUT_QUESTION_CONTENT", newQuestionString: event.target.value, courseIndex, questionIndex});
+  dispatch({type: "TOGGLE_ANSWER_CORRECTNESS", examIndex, questionIndex, answerIndex});
 }
 
-const inputQuestionCategory = (dispatch, courseIndex, questionIndex) => (event) => {
+const inputAnswerContent = (dispatch, examIndex, questionIndex, answerIndex) => (event) => {
   (async () => {
     let response = {};
     try {
-      response = await axios.put(`${SERVER_URI}/api/courses/${courseIndex}/questions/${questionIndex}`, {newCategory: event.target.value});
-      console.log("Server response: ", response);
+      response = await axios.put(`${SERVER_URI}/api/exams/${examIndex}/questions/${questionIndex}/answers/${answerIndex}`, {newAnswerString: event.target.value});
     } catch (error) {
-      console.log("Server returned error: ", error);
+      return;
     }
-
-    console.log("getting into here")
+    console.log(response.data);
   })()
 
-  dispatch({type: "INPUT_QUESTION_CATEGORY", newCategory: event.target.value, courseIndex, questionIndex});
-}
-
-const inputAnswerContent = (dispatch, courseIndex, questionIndex, answerIndex) => (event) => {
-  (async () => {
-    let response = {};
-    try {
-      response = await axios.put(`${SERVER_URI}/api/courses/${courseIndex}/questions/${questionIndex}/answers/${answerIndex}`, {newAnswerString: event.target.value});
-      console.log("Server response: ", response);
-    } catch (error) {
-      console.log("Server returned error: ", error);
-    }
-
-    console.log("getting into here")
-  })()
-
-  dispatch({type: "INPUT_ANSWER_CONTENT", newAnswerString: event.target.value, courseIndex, questionIndex, answerIndex});
+  dispatch({type: "INPUT_ANSWER_CONTENT", newAnswerString: event.target.value, examIndex, questionIndex, answerIndex});
 }
 
 
-export {switchCourse,
+
+
+
+export {switchExam,
         userTogglesAnswer,
         userTogglesDoneWithAnswering,
         toggleAdmin,
         togglePage,
-        addCourse,
+        addExam,
         addQuestion,
         addAnswer,
-        deleteCourse,
+        deleteExam,
         deleteQuestion,
         deleteAnswer,
         toggleAnswerCorrectness,
-        inputCourseName,
+        inputExamName,
         inputQuestionContent,
         inputQuestionCategory,
         inputAnswerContent

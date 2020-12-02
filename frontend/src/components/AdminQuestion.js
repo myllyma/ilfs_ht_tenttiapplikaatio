@@ -7,24 +7,24 @@ import TextField from '@material-ui/core/Input';
 import {Context} from '../utility/provider.js';
 import {toggleAnswerCorrectness, inputAnswerContent, deleteAnswer, addAnswer} from '../utility/callbacks';
 
-const AdminQuestion = ({courseIndex, questionIndex}) => {
+const AdminQuestion = ({examIndex, questionIndex}) => {
   const {state, dispatch} = useContext(Context);
 
   return (
     <div>
-      {state.courses[courseIndex].questions[questionIndex].answers.map((answer, answerIndex) => 
+      {state.exams[examIndex].questions[questionIndex].answers.map((answer, answerIndex) => 
         <div key={answer.id}>
           <Checkbox 
             color="primary" 
-            onChange={toggleAnswerCorrectness(dispatch, courseIndex, questionIndex, answerIndex, state.courses[courseIndex].questions[questionIndex].answers[answerIndex].isCorrectAnswer)} 
+            onChange={toggleAnswerCorrectness(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].isCorrectAnswer)} 
             checked={answer.isCorrectAnswer}/>
           <TextField
             value={answer.answerString}
-            onChange={inputAnswerContent(dispatch, courseIndex, questionIndex, answerIndex)} />
-          <Button  onClick={deleteAnswer(dispatch, courseIndex, questionIndex, answerIndex)}><DeleteIcon/></Button>
+            onChange={inputAnswerContent(dispatch, examIndex, questionIndex, answerIndex)} />
+          <Button  onClick={deleteAnswer(dispatch, examIndex, questionIndex, answerIndex)}><DeleteIcon/></Button>
         </div>
       )}
-      <Button onClick={addAnswer(dispatch, courseIndex, questionIndex)}><AddIcon/></Button>
+      <Button onClick={addAnswer(dispatch, examIndex, questionIndex)}><AddIcon/></Button>
     </div>
   );
 }

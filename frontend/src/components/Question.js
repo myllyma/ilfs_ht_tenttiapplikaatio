@@ -5,10 +5,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import {userTogglesAnswer} from '../utility/callbacks';
 
 // Display an individual question
-const Question = ({courseIndex, questionIndex}) => {
+const Question = ({examIndex, questionIndex}) => {
   const {state, dispatch} = useContext(Context);
 
-  const question = state.courses[courseIndex].questions[questionIndex];
+  const question = state.exams[examIndex].questions[questionIndex];
 
   let showCorrectAnswerMark = true;
   question.answers.forEach((userAnswer) => { 
@@ -27,7 +27,7 @@ const Question = ({courseIndex, questionIndex}) => {
         <div key={answer.id}>
           <Checkbox 
             color="primary" 
-            onChange={userTogglesAnswer(dispatch, courseIndex, questionIndex, answerIndex)} 
+            onChange={userTogglesAnswer(dispatch, examIndex, questionIndex, answerIndex)} 
             checked={answer.isChecked} 
             readOnly={true}
           />

@@ -1,4 +1,4 @@
-POST http://localhost:3001/api/question/
+GET http://localhost:3001/api/exam/
 Content-Type: application/json
 
 {

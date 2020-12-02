@@ -1,8 +1,8 @@
-DELETE http://localhost:3001/api/answer/
+PUT http://localhost:3001/api/question/questionstring
 Content-Type: application/json
 
 {
   "examId": "1575e2-61-7a53-ab0d-bd740fc0350",
   "questionId": "b84af5e-1a55-b205-586e-dbc231c21ff",
-  "answerId": "f0eed2-a32b-2781-736b-ad708e8482e7"
+  "newQuestionString": "testikysymys"
 }

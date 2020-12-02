@@ -4,14 +4,14 @@ import Button from '@material-ui/core/Button';
 import Questions from './Question';
 import {userTogglesDoneWithAnswering} from '../utility/callbacks';
 
-const CourseContents = () => {
+const ExamContents = () => {
   const {state, dispatch} = useContext(Context);
 
   return(
     <div>
       <div>
-        {state.courses[state.activeCourse].questions.map((question, questionIndex) => 
-            <Questions key={question.id} courseIndex={state.activeCourse} questionIndex={questionIndex}/>
+        {state.exams[state.activeExam].questions.map((question, questionIndex) => 
+            <Questions key={question.id} examIndex={state.activeExam} questionIndex={questionIndex}/>
         )}
       </div>
       {!state.showAnswers && <Button variant="contained" color="primary" onClick={userTogglesDoneWithAnswering(dispatch)}>Näytä vastaukset</Button>}
@@ -19,4 +19,4 @@ const CourseContents = () => {
   );
 }
 
-export default CourseContents;
+export default ExamContents;

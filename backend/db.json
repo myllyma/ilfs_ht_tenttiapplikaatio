@@ -1,15 +1,15 @@
 {
-  "courses": [
+  "exams": [
     {
-      "courseName": "testikurssi testi",
+      "examName": "testikurssi testi",
       "questions": [
         {
           "questionString": "testikysymys 1",
           "answers": [
             {
-              "answerString": "testivastaus 1greg",
+              "answerString": "testivastaus 1f",
               "id": "d151b0c-82c4-a4f-20b-3d52b754c1a8",
-              "isCorrectAnswer": false
+              "isCorrectAnswer": true
             },
             {
               "answerString": "testivastaus 2",
@@ -17,8 +17,8 @@
               "id": "f1a2cb0-c5c2-126f-cc02-38e8c256cbb"
             },
             {
-              "answerString": "testivastaus 3",
-              "isCorrectAnswer": false,
+              "answerString": "testivastaus 3 j",
+              "isCorrectAnswer": true,
               "id": "22e2ddd-e8d6-6051-f43-8842f84eaff6"
             },
             {
@@ -111,101 +111,31 @@
           ],
           "id": "d228e20-6fd7-e4ef-1fdd-c3207e5cbb7",
           "category": "kategoria 2"
+        },
+        {
+          "questionString": "testikysymys",
+          "answers": [
+            {
+              "answerString": "test answer",
+              "isCorrectAnswer": true,
+              "id": "b5dec87-4fb7-7a2c-4d55-1371a3bda2bd"
+            },
+            {
+              "answerString": "",
+              "isCorrectAnswer": false,
+              "id": "ac5656-2e2c-bd41-8032-7482df1308"
+            },
+            {
+              "answerString": "",
+              "isCorrectAnswer": false,
+              "id": "d77841e-f230-de-fa25-b72be5310a0"
+            }
+          ],
+          "category": "testityyppi",
+          "id": "b84af5e-1a55-b205-586e-dbc231c21ff"
         }
       ],
       "id": "1575e2-61-7a53-ab0d-bd740fc0350"
-    },
-    {
-      "courseName": "testikurssi 2",
-      "questions": [
-        {
-          "questionString": "testikysymys 5",
-          "answers": [
-            {
-              "answerString": "testivastaus 1",
-              "isCorrectAnswer": true,
-              "id": "c20513-c470-e107-241e-e31db64b248"
-            },
-            {
-              "answerString": "testivastaus 2",
-              "isCorrectAnswer": false,
-              "id": "5483d4-a7df-df31-6025-f58ed584dea4"
-            },
-            {
-              "answerString": "testivastaus 3",
-              "isCorrectAnswer": false,
-              "id": "e0a61f5-e5f7-b10a-3613-4bfe0355ff"
-            },
-            {
-              "answerString": "testivastaus 4",
-              "isCorrectAnswer": false,
-              "id": "caca384-e4b6-1c4b-dae0-0ec5da7e34"
-            }
-          ],
-          "id": "2b46a7-80d5-55b8-054f-ad82cfba8ad0",
-          "category": "kategoria 1"
-        },
-        {
-          "questionString": "testikysymys 6",
-          "answers": [
-            {
-              "answerString": "testivastaus 1",
-              "isCorrectAnswer": true,
-              "id": "aad006b-816a-c8a-c22a-d3fc7702547"
-            },
-            {
-              "answerString": "testivastaus 2",
-              "isCorrectAnswer": true,
-              "id": "e7f2102-0e3-a6d2-dab3-71dc7fb875a"
-            },
-            {
-              "answerString": "testivastaus 3",
-              "isCorrectAnswer": false,
-              "id": "0506b8-6e21-1ae1-d87-cc52a46274"
-            },
-            {
-              "answerString": "testivastaus 4",
-              "isCorrectAnswer": false,
-              "id": "fbacae3-5018-c347-426a-5bf86a5ba7a"
-            }
-          ],
-          "id": "beec43f-7ebf-0f03-6551-da4436cc243",
-          "category": "kategoria 3"
-        },
-        {
-          "questionString": "testikysymys 7",
-          "answers": [
-            {
-              "answerString": "testivastaus 1",
-              "isCorrectAnswer": true,
-              "id": "f74d3-6304-def-73c-53ab76ca6665"
-            },
-            {
-              "answerString": "testivastaus 2",
-              "isCorrectAnswer": true,
-              "id": "3133ec-517e-dfdc-dad-3fe21c077a41"
-            },
-            {
-              "answerString": "testivastaus 3",
-              "isCorrectAnswer": false,
-              "id": "c2f470e-362b-cfd1-cbda-30bae53d2048"
-            },
-            {
-              "answerString": "testivastaus 4",
-              "isCorrectAnswer": true,
-              "id": "b776550-55cc-7b2b-0820-8ccf53b1d"
-            }
-          ],
-          "id": "1d224b5-27ab-b5ab-f76e-7e2d7e37e25",
-          "category": "kategoria 3"
-        }
-      ],
-      "id": "d778ab5-8d44-bcf8-8e5a-36433ce3104e"
-    },
-    {
-      "courseName": "",
-      "questions": [],
-      "id": "ae0413-e68b-4b00-1453-d14c75ca7"
     }
   ]
 }

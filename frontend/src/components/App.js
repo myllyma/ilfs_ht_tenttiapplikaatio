@@ -3,10 +3,10 @@ import axios from 'axios';
 import Header from '../components/Header';
 import {useContext, useEffect} from 'react';
 import {Context} from '../utility/provider.js';
-import CourseSelectionList from '../components/CourseSelectionList';
-import CourseContents from '../components/CourseContents';
-import AdminCourseSelectionList from '../components/AdminCourseSelectionList';
-import AdminCourseContents from '../components/AdminCourseContents';
+import ExamSelectionList from '../components/ExamSelectionList';
+import ExamContents from '../components/ExamContents';
+import AdminExamSelectionList from '../components/AdminExamSelectionList';
+import AdminExamContents from '../components/AdminExamContents';
 import Visualization from './Visualization';
 
 const App = () => {
@@ -14,15 +14,15 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get(`http://localhost:3001/api/courses`);
+      const response = await axios.get(`http://localhost:3001/api/exams`);
       const newProgramState = {};
-        newProgramState.activeCourse = 0;
+        newProgramState.activeExam = 0;
         newProgramState.showAnswers = false;
         newProgramState.admin = false;
         newProgramState.visiblePage = "EXAMS";
-        newProgramState.courses = response.data.map((course) => ({
-          ...course,
-          questions: course.questions.map((question) => ({
+        newProgramState.exams = response.data.map((exam) => ({
+          ...exam,
+          questions: exam.questions.map((question) => ({
             ...question,
             answers: question.answers.map((answer) => ({
               ...answer,
@@ -34,9 +34,7 @@ const App = () => {
     })();                  
   }, [dispatch]);
 
-  console.log("Program state: ", state);
-
-  if (!state.courses) {
+  if (!state.exams) {
     return(
       <div>
         <Header/>
@@ -52,13 +50,13 @@ const App = () => {
           <main className="mainContent">
             {!state.admin ?
             <>
-              <CourseSelectionList/>
-              <CourseContents/>
+              <ExamSelectionList/>
+              <ExamContents/>
             </>
             :
             <>
-              <AdminCourseSelectionList/>
-              <AdminCourseContents/>
+              <AdminExamSelectionList/>
+              <AdminExamContents/>
             </>}
           </main>
         </div>
