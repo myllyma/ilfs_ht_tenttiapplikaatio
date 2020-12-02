@@ -1,6 +1,1 @@
-GET http://localhost:3001/api/exam/
-Content-Type: application/json
-
-{
-  "examId": "1575e2-61-7a53-ab0d-bd740fc0350"
-}
+GET http://localhost:3001/api/exam/4

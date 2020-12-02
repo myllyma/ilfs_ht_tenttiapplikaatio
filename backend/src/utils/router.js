@@ -17,80 +17,116 @@ const pool = new Pool({connectionString});
 //---------------------------------------
 
 // Get all exams
-router.get("/exam/", (req, res, next) => {
-  (async () => {
-    const queryString = `
-      SELECT exam.id as examId, question.id as questionId, answer.id as answerId, exam.name as examName, question.question_text as questionString, answer.answer_text as answerString
-      FROM public.answer
-      LEFT OUTER JOIN public.question ON answer.question_id = question.id
-      LEFT OUTER JOIN public.exam ON question.exam_id = exam.id;`;
-    const parameters = [];
+router.get("/exam/", async (req, res, next) => {
+  const queryString = `
+    SELECT exam.id as examId, question.id as questionId, answer.id as answerId, exam.name as examName, question.question_text as questionString, answer.answer_text as answerString
+    FROM public.answer
+    LEFT OUTER JOIN public.question ON answer.question_id = question.id
+    LEFT OUTER JOIN public.exam ON question.exam_id = exam.id;
+  `;
+  const parameters = [];
 
-    await pool.query(queryString, parameters, (err, DBResult) => {
-      if (err) {
-        console.log(err.stack);
-      } else {
-        return res.json(DBResult);;
-      }
-    });
-  })()
+  await pool.query(queryString, parameters, (err, result) => {
+    if (err) {
+      next({type: "DatabaseError", errorText: "Database search error."});
+    } else {
+      return res.json(result);;
+    }
+  });
 });
 
 // Get an individual exam by id
-router.get("/exam/:examId", (req, res, next) => {
-  if (!("examId" in req.params)) {
-    return res.status(400).json({error: "malformed request"});
-  }
+router.get("/exam/:examId", async (req, res, next) => {
+  const queryString = `
+    SELECT exam.id as examId, question.id as questionId, answer.id as answerId, exam.name as examName, question.question_text as questionString, answer.answer_text as answerString
+    FROM public.answer
+    LEFT OUTER JOIN public.question ON answer.question_id = question.id
+    LEFT OUTER JOIN public.exam ON question.exam_id = exam.id
+    WHERE exam.id = $1;
+  `;
+  const parameters = [req.params.examId];
 
-  const responseObject = db.get("exams").find({id: req.body.examId}).value();
-  
-  if (responseObject) {
-    return res.json(responseObject);
-  } else {
-    return res.status(404).end();
-  }
+  await pool.query(queryString, parameters, (err, result) => {
+    if (err) {
+      next({type: "DatabaseError", errorText: "Database search error."});
+    } else if (result.rowCount === 0) {
+      next({type: "NoContent", errorText: "Given exam table ID had no data associated with it."});
+    } else {
+      return res.json(result);;
+    }
+  });
 });
 
 // Post a new exam
-router.post("/exam/", (req, res, next) => {
-  const newExam = {
-    examName: "",
-    questions: [],
-    id: uuid()
-  };
+router.post("/exam/", async (req, res, next) => {
+  if (!("courseId" in req.body)) {
+    next({type: "MalformedRequest", errorText: "Malformed request, missing courseId from message body."});
+  }
 
-  db.get("exams").push(newExam).write();
+  const queryString = `
+    INSERT INTO public.exam (course_id, name)
+    VALUES ($1, '')
+    RETURNING id;
+  `;
+  const parameters = [req.body.courseId];
 
-  return res.json(newExam);
+  await pool.query(queryString, parameters, (err, result) => {
+    if (err) {
+      next({type: "DatabaseError", errorText: "Database error."});
+    } else if (result.rowCount === 0) {
+      next({type: "DatabaseError", errorText: "Failed to add a new exam to database."})
+    } else {
+      return res.json({id: result.rows[0].id, name: "", });
+    }
+  });
 });
 
 // Delete an exam
-router.delete("/exam/", (req, res, next) => {
+router.delete("/exam/", async (req, res, next) => {
   if (!("examId" in req.body)) {
-    return res.status(400).json({error: "missing information from request body"});
+    next({type: "MalformedRequest", errorText: "Malformed request, missing examId from message body."});
   }
 
-  try {
-    db.get("exams").remove({id: req.body.examId}).write();
-  } catch (error) {
-    return response.status(404).end();
-  }
+  const queryString = `
+    DELETE FROM public.exam
+    WHERE exam.id = $1
+  `;
+  const parameters = [req.body.examId];
 
-  return res.status(204).end();
+  await pool.query(queryString, parameters, (err, result) => {
+    if (err) {
+      next({type: "DatabaseError", errorText: "Database error."});
+    } else if (result.rowCount === 0) {
+      next({type: "DatabaseError", errorText: "Failed to delete an exam from database."})
+    } else {
+      return res.json({response: "Exam deletion successful."});
+    }
+  });
 });
 
 // Set exam name
-router.put("/exam/", (req, res) => {
+router.put("/exam/", async (req, res) => {
   if (!("examId" in req.body) || !("newExamName" in req.body)) {
+    next({type: "MalformedRequest", errorText: "Malformed request, missing examId or newExamName from message body."});
     return res.status(400).json({error: "missing information from request body"});
   }
 
-  try {
-    db.get("exams").find({id: req.body.examId}).assign({examName: req.body.newExamName}).write();
-    return res.json({answer:"Exam name changed successfully"});
-  } catch (error) {
-    return response.status(404).end();
-  }
+  const queryString = `
+    UPDATE public.exam
+    SET name = $1
+    WHERE id = $2;
+  `;
+  const parameters = [req.body.newExamName, req.body.examId];
+
+  await pool.query(queryString, parameters, (err, result) => {
+    if (err) {
+      next({type: "DatabaseError", content: "Database error."});
+    } else if (result.rowCount === 0) {
+      next({type: "DatabaseError", content: "Failed to modify an exam's name."})
+    } else {
+      return res.json({response: "Exam name changed successfully."});
+    }
+  });
 });
 
 //---------------------------------------
@@ -234,6 +270,4 @@ router.put("/answer/iscorrect", (req, res, next) => {
   }
 });
 
-
-
-module.exports = {router};
+module.exports = router;

@@ -1,1 +1,6 @@
 POST http://localhost:3001/api/exam
+Content-Type: application/json
+
+{
+  "courseId": "1"
+}

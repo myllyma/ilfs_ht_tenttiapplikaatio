@@ -2,6 +2,6 @@ PUT http://localhost:3001/api/exam/
 Content-Type: application/json
 
 {
-  "examId": "b88dea-fd03-50fb-5e52-8dc628e6a50",
-  "newExamName": "testikurssi testi a"
+  "examId": "10",
+  "newExamName": "testikurssi testi"
 }
