@@ -3,5 +3,5 @@ Content-Type: application/json
 
 {
   "examId": "10",
-  "newExamName": "testikurssi testi"
+  "newExamName": "this is a test"
 }

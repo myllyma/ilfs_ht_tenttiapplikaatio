@@ -3,5 +3,5 @@ Content-Type: application/json
 
 {
   "answerId": "67",
-  "newAnswerString": 5
+  "newAnswerString": "this is a test"
 }

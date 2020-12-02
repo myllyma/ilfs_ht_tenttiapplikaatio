@@ -2,5 +2,5 @@ DELETE http://localhost:3001/api/question/
 Content-Type: application/json
 
 {
-  "questionId": "18"
+  "questionId": "19"
 }
