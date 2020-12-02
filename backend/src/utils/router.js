@@ -1,9 +1,16 @@
 const router = require("express").Router();
+
+
 const uuid = require("react-uuid");
 const lowdb = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 const adapter = new FileSync("db.json");
 const db = lowdb(adapter);
+
+
+const {Pool} = require("pg");
+const connectionString = `postgresql://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`
+const pool = new Pool({connectionString});
 
 //---------------------------------------
 // Exam related routes
@@ -11,13 +18,22 @@ const db = lowdb(adapter);
 
 // Get all exams
 router.get("/exam/", (req, res, next) => {
-  const responseObject = db.get(`exams`).value();
+  (async () => {
+    const queryString = `
+      SELECT exam.id as examId, question.id as questionId, answer.id as answerId, exam.name as examName, question.question_text as questionString, answer.answer_text as answerString
+      FROM public.answer
+      LEFT OUTER JOIN public.question ON answer.question_id = question.id
+      LEFT OUTER JOIN public.exam ON question.exam_id = exam.id;`;
+    const parameters = [];
 
-  if (responseObject) {
-    return res.json(responseObject);
-  } else {
-    return res.status(404).send({error: "server error, data not found"});
-  }
+    await pool.query(queryString, parameters, (err, DBResult) => {
+      if (err) {
+        console.log(err.stack);
+      } else {
+        return res.json(DBResult);;
+      }
+    });
+  })()
 });
 
 // Get an individual exam by id
