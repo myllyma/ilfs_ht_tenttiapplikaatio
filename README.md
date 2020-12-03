@@ -1,13 +1,20 @@
 # Ideal Learning fullstack course's main excercise work.
 
-A testing and development version of both the frontend and backend can be executed with:
+A testing and development version of the frontend can be started with:
 
 `npm start`
 
--command in their respective directories.
+Needs to be ran in the "frontend"-directory.
 
-Both must be running for frontend to get the necessary data.
+And backend development version can be executed with:
+
+`npm run dev`
 
 # Project state
 
-Basic server implementation complete. It still needs considerable refactoring to make it "pretty", but it does what it needs to do for now. Proper SQL database integration coming up later once it has been built.
+-Currently, since the database is not public, the backend cannot get data, thus no functionality.
+-Server implementation basically complete. Routes and SQL calls for the basic set of commands essentially complete (with a slight addition needed for GET routes to massage data into a better form for the frontend).
+-Frontend has not yet matched up to the changes made to backend during its development round.
+-No concept of "user" in either frontend or backend yet, only in database.
+-Login not implemented.
+-Concept of "course" to attach exams to has not yet implemented in routes or frontend.
