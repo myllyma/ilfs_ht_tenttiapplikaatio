@@ -1,7 +1,7 @@
-PUT http://localhost:3001/api/question/category
+PUT http://localhost:3001/api/question/subject
 Content-Type: application/json
 
 {
   "questionId": "13",
-  "newCategory": "testityyppi asdf"
+  "newSubject": "testityyppi"
 }

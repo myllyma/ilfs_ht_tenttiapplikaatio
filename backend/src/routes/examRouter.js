@@ -2,32 +2,59 @@ const examRouter = require("express").Router();
 const db = require("../utils/pgdb");
 
 const constructExamObject = (data) => {
-  const examObject = {id: data[0].examid, examName: data[0].examName, questions: []};
+  // Construct the base exam object
+  const examObject = {
+    id: data[0].examid, 
+    name: data[0].examname, 
+    courseId: data[0].courseid,
+    questions: []
+  };
 
+  if (data.length < 1) { // Safety latch if there are no rows.
+    return (null);
+  }
+
+  // Construct the questions and answers for the exam.
   data.forEach((row) => {
     const questionBeingChecked = examObject.questions.filter(question => question.id === row.questionid);
-    if (questionBeingChecked.length > 0) {
+    if (questionBeingChecked.length > 0) { // Question found
       const answerBeingChecked = examObject.questions[0].answers.filter(answer => answer.id === row.answerid);
-      if (answerBeingChecked.length > 0) {
-        next({type: "DatabaseError", errorText: "Database error."});
-      } else { // Answer not found, pushing new answer.
+      // Answer found, this should never happen, as the same combination of exam-question-answer occurring twice 
+      // on one search is never supposed to happen, assuming the query is formed correctly.
+      if (answerBeingChecked.length > 0) { 
+        next({type: "DatabaseError", errorText: "Database error detected on exam object formation."});
+      
+      // Answer not found, pushing new answer.
+      } else { 
         examObject.questions.find(question => question.id === row.questionid).answers.push({
-          id: row.answerId,
+          id: row.answerid,
+          questionId: row.questionid,
           answerString: row.answerstring,
-          isCorrectAnswer: row.iscorrectanswer,
+          isAnswerCorrect: row.isanswercorrect,
           isChecked: false
         })
       }
-    } else { // Question not found, pushing new question.
+    } else if (row.answerid !== null) { // Question not found, pushing new question. An answer exists for the question.
       examObject.questions.push({
         id: row.questionid,
+        examId: row.examid,
         questionString: row.questionstring,
+        subject: row.subject,
         answers: [{
-          id: row.answerId,
+          id: row.answerid,
+          questionId: row.questionid,
           answerString: row.answerstring,
-          isCorrectAnswer: row.iscorrectanswer,
+          isAnswerCorrect: row.isanswercorrect,
           isChecked: false
         }]
+      });
+    } else { // Question not found, pushing new question. An answer does not exist for the question.
+      examObject.questions.push({
+        id: row.questionid,
+        examId: row.examid,
+        questionString: row.questionstring,
+        subject: row.subject,
+        answers: []
       });
     }
   });
@@ -38,22 +65,25 @@ const constructExamObject = (data) => {
 // Get an individual exam by id
 examRouter.get("/exam/getspecific/:examId", async (req, res, next) => {
   const queryString = `
-    SELECT exam.id as examId, question.id as questionId, answer.id as answerId, exam.name as examName, question.question_text as questionString, answer.answer_text as answerString, answer.is_answer_correct as isCorrectAnswer
-    FROM public.answer
-    JOIN public.question ON answer.question_id = question.id
-    JOIN public.exam ON question.exam_id = exam.id
+    SELECT  course.id as courseid, exam.id as examid, question.id as questionid, answer.id as answerid, 
+            exam.name as examname, question.question_text as questionstring, question.subject as subject, 
+            answer.answer_text as answerstring, answer.is_answer_correct as isAnswerCorrect
+    FROM answer
+    FULL JOIN question ON answer.question_id = question.id
+    FULL JOIN exam ON question.exam_id = exam.id
+    FULL JOIN course ON exam.course_id = course.id
     WHERE exam.id = $1;
   `;
   const parameters = [req.params.examId];
 
   await db.query(queryString, parameters, (err, result) => {
     if (err) {
-      return next({type: "DatabaseError", errorText: "Database search error 1."});
+      return next({type: "DatabaseError", errorText: "Database search error."});
     } else if (result.rowCount === 0) {
       return next({type: "NoContent", errorText: "Exam by given ID does not exist."});
     } else {
       const examObject = constructExamObject(result.rows);
-      return res.json(examObject);
+      return res.status(200).json(examObject);
     }
   });
 });
@@ -61,18 +91,18 @@ examRouter.get("/exam/getspecific/:examId", async (req, res, next) => {
 examRouter.get("/exam/permittedexams", async (req, res, next) => {
   const queryString = `
     SELECT exam.id as examId, exam.name as examName
-    FROM public.exam;
+    FROM exam;
   `;
   const parameters = [];
 
   await db.query(queryString, parameters, (err, result) => {
     if (err) {
-      return next({type: "DatabaseError", errorText: "Database search error 2."});
+      return next({type: "DatabaseError", errorText: "Database search error."});
     } else if (result.rowCount === 0) {
       return next({type: "NoContent", errorText: "Exam by given ID does not exist."});
     } else {
       const permittedExams = result.rows;
-      return res.json(permittedExams);
+      return res.status(200).json(permittedExams);
     }
   });
 });
@@ -95,21 +125,27 @@ examRouter.post("/exam/", async (req, res, next) => {
 
   await db.query(queryString, parameters, (err, result) => {
     if (err) {
-      return next({type: "DatabaseError", errorText: "Database error 3."});
+      return next({type: "DatabaseError", errorText: "Database error."});
     } else if (result.rowCount === 0) {
       return next({type: "DatabaseError", errorText: "Failed to add a new exam to database."})
     } else {
-      return res.json({id: result.rows[0].id, name: "", });
+      const responseObject = {
+        id: result.rows[0].id,
+        courseId: req.body.courseId,
+        name: "",
+        questions: []
+      }
+      return res.status(200).json(responseObject);
     }
   });
 });
 
 // Delete an exam
-examRouter.delete("/exam/", async (req, res, next) => {
-  if (!("examId" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing examId from message body."});
+examRouter.delete("/exam/:examId", async (req, res, next) => {
+  if (!("examId" in req.params)) {
+    return next({type: "MalformedRequest", errorText: "Malformed request, missing examId from message parameters."});
   }
-  if (typeof req.body.examId !== "string") {
+  if (typeof req.params.examId !== "string") {
     return next({type: "MalformedRequest", errorText: "Malformed request, examId is of incorrect type."});
   }
 
@@ -117,21 +153,19 @@ examRouter.delete("/exam/", async (req, res, next) => {
     DELETE FROM public.exam
     WHERE exam.id = $1
   `;
-  const parameters = [req.body.examId];
+  const parameters = [req.params.examId];
 
   await db.query(queryString, parameters, (err, result) => {
     if (err) {
-      return next({type: "DatabaseError", errorText: "Database error 4."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", errorText: "Failed to delete an exam from database."})
+      return next({type: "DatabaseError", errorText: "Database error."});
     } else {
-      return res.json({response: "Exam deletion successful."});
+      return res.status(200).end();
     }
   });
 });
 
 // Set exam name
-examRouter.put("/exam/", async (req, res) => {
+examRouter.put("/exam/name", async (req, res, next) => {
   if (!("examId" in req.body) || !("newExamName" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing examId or newExamName from message body."});
   }
@@ -148,11 +182,11 @@ examRouter.put("/exam/", async (req, res) => {
 
   await db.query(queryString, parameters, (err, result) => {
     if (err) {
-      return next({type: "DatabaseError", content: "Database error 5."});
+      return next({type: "DatabaseError", content: "Database error."});
     } else if (result.rowCount === 0) {
       return next({type: "DatabaseError", content: "Failed to modify an exam's name."})
     } else {
-      return res.json({response: "Exam name changed successfully."});
+      return res.status(200).json({response: "Exam name changed successfully."});
     }
   });
 });

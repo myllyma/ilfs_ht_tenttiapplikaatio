@@ -6,15 +6,20 @@ import {switchExam} from '../utility/callbacks';
 const ExamSelectionList = () => {
   const {state, dispatch} = useContext(Context);
 
-  return (
-    <div>
-      {state.exams.map((exam, examIndex) => 
-        <Button key={exam.id} color="primary" className="ExamSelectionListItem" onClick={switchExam(dispatch, examIndex)}>
-          {exam.examName}
-        </Button>
-      )}
-    </div>
-  );
+  if (!("exams" in state)) {
+    return (<div/>);
+  } else {
+    return (
+      <div>
+        {state.exams.map((exam, examIndex) => 
+          exam &&
+          <Button key={exam.id} color="primary" className="ExamSelectionListItem" onClick={switchExam(dispatch, examIndex)}>
+            {exam.name}
+          </Button>
+        )}
+      </div>
+    );
+  }
 }
 
 export default ExamSelectionList;

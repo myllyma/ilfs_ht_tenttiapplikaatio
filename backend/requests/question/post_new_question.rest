@@ -2,5 +2,5 @@ POST http://localhost:3001/api/question/
 Content-Type: application/json
 
 {
-  "examId": "10"
+  "examId": "3"
 }

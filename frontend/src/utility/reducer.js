@@ -1,5 +1,3 @@
-import uuid from 'react-uuid'
-
 const reducer = (state, action) => {
   const newProgramState = JSON.parse(JSON.stringify(state));
   switch (action.type) {
@@ -29,13 +27,7 @@ const reducer = (state, action) => {
 
     // Exam operations
     case "ADD_EXAM":
-      const newExam = {
-        examName: "",
-        questions: [],
-        id: action.examId
-      };
-      newProgramState.exams = newProgramState.exams.concat(newExam);
-      newExam.id = uuid();
+      newProgramState.exams = newProgramState.exams.concat(action.data);
       return(newProgramState);
 
     case "DELETE_EXAM":
@@ -43,19 +35,14 @@ const reducer = (state, action) => {
       return(newProgramState);
 
     case "INPUT_EXAM_NAME":
-      newProgramState.exams[action.examIndex].examName = action.newExamNameString;
+      newProgramState.exams[action.examIndex].examName = action.name;
       return(newProgramState);
 
 
     // Question operations
     case "ADD_QUESTION":
-      const newQuestion = {
-        questionString: "",
-        answers: []
-      };
-      newQuestion.id = uuid();
       newProgramState.exams[action.examIndex].questions = 
-        newProgramState.exams[action.examIndex].questions.concat(newQuestion);
+        newProgramState.exams[action.examIndex].questions.concat(action.data);
       return(newProgramState);
 
     case "DELETE_QUESTION":
@@ -63,37 +50,30 @@ const reducer = (state, action) => {
       return(newProgramState);
     
     case "INPUT_QUESTION_CONTENT":
-      newProgramState.exams[action.examIndex].questions[action.questionIndex].questionString = action.newQuestionString;
+      newProgramState.exams[action.examIndex].questions[action.questionIndex].questionString = action.questionString;
       return(newProgramState);
 
-    case "INPUT_QUESTION_CATEGORY":
-      newProgramState.exams[action.examIndex].questions[action.questionIndex].category = action.newCategory;
+    case "INPUT_QUESTION_SUBJECT":
+      newProgramState.exams[action.examIndex].questions[action.questionIndex].subject = action.subject;
       return(newProgramState);
 
 
     // Answer operations
     case "ADD_ANSWER":
-      const newAnswer = {
-        answerString: "",
-        isCorrectAnswer: false,
-        isChecked: false
-      };
-      newAnswer.id = uuid();
       newProgramState.exams[action.examIndex].questions[action.questionIndex].answers = 
-        newProgramState.exams[action.examIndex].questions[action.questionIndex].answers.concat(newAnswer);
+        newProgramState.exams[action.examIndex].questions[action.questionIndex].answers.concat(action.data);
       return(newProgramState);
 
     case "DELETE_ANSWER":
       newProgramState.exams[action.examIndex].questions[action.questionIndex].answers.splice(action.answerIndex, 1);
       return(newProgramState);
 
-    case "TOGGLE_ANSWER_CORRECTNESS":
-      newProgramState.exams[action.examIndex].questions[action.questionIndex].answers[action.answerIndex].isCorrectAnswer = 
-        !newProgramState.exams[action.examIndex].questions[action.questionIndex].answers[action.answerIndex].isCorrectAnswer;
+    case "INPUT_ANSWER_CONTENT":
+      newProgramState.exams[action.examIndex].questions[action.questionIndex].answers[action.answerIndex].answerString = action.answerString;
       return(newProgramState);
 
-    case "INPUT_ANSWER_CONTENT":
-      newProgramState.exams[action.examIndex].questions[action.questionIndex].answers[action.answerIndex].answerString = action.newAnswerString;
+    case "TOGGLE_ANSWER_CORRECTNESS":
+      newProgramState.exams[action.examIndex].questions[action.questionIndex].answers[action.answerIndex].isAnswerCorrect = action.isAnswerCorrect;
       return(newProgramState);
 
     // Initialize state

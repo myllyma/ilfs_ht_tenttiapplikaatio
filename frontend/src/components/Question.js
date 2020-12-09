@@ -12,7 +12,7 @@ const Question = ({examIndex, questionIndex}) => {
 
   let showCorrectAnswerMark = true;
   question.answers.forEach((userAnswer) => { 
-    if (userAnswer.isChecked !== userAnswer.isCorrectAnswer) {
+    if (userAnswer.isChecked !== userAnswer.isAnswerCorrect) {
       showCorrectAnswerMark = false;
     }
   });
@@ -34,7 +34,7 @@ const Question = ({examIndex, questionIndex}) => {
          {state.showAnswers && 
             <Checkbox 
               color="secondary" 
-              checked={answer.isCorrectAnswer} 
+              checked={answer.isAnswerCorrect} 
               readOnly={true}
             />
           }

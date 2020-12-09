@@ -4,7 +4,7 @@ const db = require("../utils/pgdb");
 // Post a new answer
 answerRouter.post("/answer/", async (req, res, next) => {
   if (!("questionId" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing questionId from message body."});
+    return next({type: "MalformedRequest", errorText: "Malformed request, missing questionId from message params."});
   }
   if (typeof req.body.questionId !== "string") {
     return next({type: "MalformedRequest", errorText: "Malformed request, questionId is of incorrect type."});
@@ -21,19 +21,26 @@ answerRouter.post("/answer/", async (req, res, next) => {
     if (err) {
       return next({type: "DatabaseError", errorText: "Database error."});
     } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", errorText: "Failed to add a new question to database."})
+      return next({type: "DatabaseAddFail", errorText: "Failed to add a new question to database."})
     } else {
-      return res.json({id: result.rows[0].id, answerString: "", isCorrectAnswer: false});
+      const responseObject = {
+        id: result.rows[0].id, 
+        questionId: req.body.questionId,
+        answerString: "", 
+        isAnswerCorrect: false,
+        isChecked: false
+      }
+      return res.status(200).json(responseObject);
     }
   });
 });
 
 // Delete an answer
-answerRouter.delete("/answer/", async (req, res, next) => {
-  if (!("answerId" in req.body)) {
+answerRouter.delete("/answer/:answerId", async (req, res, next) => {
+  if (!("answerId" in req.params)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing answerId from message body."});
   }
-  if (typeof req.body.answerId !== "string") {
+  if (typeof req.params.answerId !== "string") {
     return next({type: "MalformedRequest", errorText: "Malformed request, answerId is of incorrect type."});
   }
 
@@ -41,15 +48,13 @@ answerRouter.delete("/answer/", async (req, res, next) => {
     DELETE FROM public.answer
     WHERE answer.id = $1
   `;
-  const parameters = [req.body.answerId];
+  const parameters = [req.params.answerId];
 
   await db.query(queryString, parameters, (err, result) => {
     if (err) {
       return next({type: "DatabaseError", errorText: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", errorText: "Failed to delete an answer from database."})
     } else {
-      return res.json({response: "Answer deletion successful."});
+      return res.status(200).end();
     }
   });
 });
@@ -66,7 +71,8 @@ answerRouter.put("/answer/answerstring", async (req, res, next) => {
   const queryString = `
     UPDATE public.answer
     SET answer_text = $1
-    WHERE id = $2;
+    WHERE id = $2
+    RETURNING answer_text;
   `;
   const parameters = [req.body.newAnswerString, req.body.answerId];
 
@@ -74,37 +80,37 @@ answerRouter.put("/answer/answerstring", async (req, res, next) => {
     if (err) {
       return next({type: "DatabaseError", content: "Database error."});
     } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", content: "Failed to modify an answer's display string."})
+      return next({type: "DatabaseAddFail", content: "Failed to modify an answer's display string."})
     } else {
-      return res.json({response: "Answer's display string changed successfully."});
+      return res.status(200).json({answerString: result.rows[0].answer_text});
     }
   });
 });
 
-// Set answer truth state
-answerRouter.put("/answer/iscorrect", async (req, res, next) => {
-  if (!("newIsCorrectAnswer" in req.body) || !("answerId" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing newIsCorrectAnswer or answerId from message body."});
+// Invert answer truth state
+answerRouter.put("/answer/toggleiscorrect", async (req, res, next) => {
+  if (!("answerId" in req.body)) {
+    return next({type: "MalformedRequest", errorText: "Malformed request, missing answerId from message body."});
   }
-  if (typeof req.body.newIsCorrectAnswer !== "boolean" || typeof req.body.answerId !== "string") {
-    console.log(typeof req.body.newIsCorrectAnswer, typeof req.body.answerId)
-    return next({type: "MalformedRequest", errorText: "Malformed request, newIsCorrectAnswer or answerId is of incorrect type."});
+  if (typeof req.body.answerId !== "string") {
+    return next({type: "MalformedRequest", errorText: "Malformed request, answerId is of incorrect type."});
   }
 
   const queryString = `
     UPDATE public.answer
-    SET is_answer_correct = $1
-    WHERE id = $2;
+    SET is_answer_correct = NOT is_answer_correct
+    WHERE id = $1
+    RETURNING is_answer_correct;
   `;
-  const parameters = [req.body.newIsCorrectAnswer, req.body.answerId];
+  const parameters = [req.body.answerId];
 
   await db.query(queryString, parameters, (err, result) => {
     if (err) {
       return next({type: "DatabaseError", content: "Database error."});
     } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", content: "Failed to modify an answer's display string."})
+      return next({type: "DatabaseAddFail", content: "Failed to modify an answer's display string."})
     } else {
-      return res.json({response: "Answer's display string changed successfully."});
+      return res.status(200).json({isAnswerCorrect: result.rows[0].is_answer_correct});
     }
   });
 });

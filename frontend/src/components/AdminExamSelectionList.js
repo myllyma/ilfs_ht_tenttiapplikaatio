@@ -10,21 +10,26 @@ import {switchExam, inputExamName, deleteExam, addExam} from '../utility/callbac
 const AdminExamSelectionList = () => {
   const {state, dispatch} = useContext(Context);
 
-  return (
-    <div>
-      {state.exams.map((exam, examIndex) => 
-        <Button key={exam.id} color="primary" className="ExamSelectionListItem">
-          <CheckIcon onClick={switchExam(dispatch, examIndex)} />
-          <TextField 
-            value={exam.examName}
-            onChange={inputExamName(dispatch, examIndex)}
-            label="Kurssin nimi" />
-          <DeleteIcon onClick={deleteExam(dispatch, examIndex)} />
-        </Button> 
-      )}
-      <Button onClick={addExam(dispatch)}><AddIcon/></Button>
-    </div>
-  );
+  if (!("exams" in state)) {
+    return (<div/>);
+  } else {
+    return (
+      <div>
+        {state.exams.map((exam, examIndex) => 
+          exam&&
+          <Button key={exam.id} color="primary" className="ExamSelectionListItem">
+            <CheckIcon onClick={switchExam(dispatch, examIndex)} />
+            <TextField 
+              value={exam.name}
+              onChange={inputExamName(dispatch, examIndex, state.exams)}
+              label="Kurssin nimi" />
+            <DeleteIcon onClick={deleteExam(dispatch, examIndex)} />
+          </Button> 
+        )}
+        <Button onClick={addExam(dispatch)}><AddIcon/></Button>
+      </div>
+    );
+  }
 }
 
 export default AdminExamSelectionList;

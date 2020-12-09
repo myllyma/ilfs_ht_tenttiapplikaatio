@@ -7,7 +7,7 @@ const questionRouter = require("./routes/questionRouter");
 const examRouter = require("./routes/examRouter");
 const middleware = require("./utils/middleware");
 
-server.use(cors());
+server.use(cors({origin: "http://localhost:3000", optionsSuccessStatus:200}));
 server.use(express.json());
 server.use("/api", answerRouter);
 server.use("/api", questionRouter);

@@ -23,34 +23,38 @@ questionRouter.post("/question/", async (req, res, next) => {
     } else if (result.rowCount === 0) {
       return next({type: "DatabaseError", errorText: "Failed to add a new question to database."})
     } else {
-      return res.json({id: result.rows[0].id, questionString: "", category: ""});
+      const responseObject = {
+        id: result.rows[0].id,
+        examId: req.body.examId,
+        questionString: "",
+        subject: "",
+        answers: []
+      }
+      return res.status(200).json(responseObject);
     }
   });
 });
 
 // Delete a question
-questionRouter.delete("/question/", async (req, res, next) => {
-  if (!("questionId" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing questionId from message body."});
+questionRouter.delete("/question/:questionId", async (req, res, next) => {
+  if (!("questionId" in req.params)) {
+    return next({type: "MalformedRequest", errorText: "Malformed request, missing questionId from message params."});
   }
-  if (typeof req.body.questionId !== "string") {
+  if (typeof req.params.questionId !== "string") {
     return next({type: "MalformedRequest", errorText: "Malformed request, questionId is of incorrect type."});
   }
-
 
   const queryString = `
     DELETE FROM public.question
     WHERE question.id = $1
   `;
-  const parameters = [req.body.questionId];
+  const parameters = [req.params.questionId];
 
   await db.query(queryString, parameters, (err, result) => {
     if (err) {
       return next({type: "DatabaseError", errorText: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", errorText: "Failed to delete a question from database."})
     } else {
-      return res.json({response: "Question deletion successful."});
+      return res.status(200).end();
     }
   });
 });
@@ -61,13 +65,14 @@ questionRouter.put("/question/questionstring", async (req, res, next) => {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing newQuestionString or questionId from message body."});
   }
   if (typeof req.body.newQuestionString !== "string" || typeof req.body.questionId !== "string") {
-    return next({type: "MalformedRequest", errorText: "Malformed request, newCategory or questionId is of incorrect type."});
+    return next({type: "MalformedRequest", errorText: "Malformed request, newQuestionString or questionId is of incorrect type."});
   }
 
   const queryString = `
     UPDATE public.question
     SET question_text = $1
-    WHERE id = $2;
+    WHERE id = $2
+    RETURNING question_text;
   `;
   const parameters = [req.body.newQuestionString, req.body.questionId];
 
@@ -77,34 +82,35 @@ questionRouter.put("/question/questionstring", async (req, res, next) => {
     } else if (result.rowCount === 0) {
       return next({type: "DatabaseError", content: "Failed to modify an question's display string."})
     } else {
-      return res.json({response: "Question string changed successfully."});
+      return res.status(200).json({questionString: result.rows[0].question_text});
     }
   });
 });
 
-// Set question category
-questionRouter.put("/question/category", async (req, res, next) => {
-  if (!("newCategory" in req.body) || !("questionId" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing newCategory or questionId from message body."});
+// Set question subject
+questionRouter.put("/question/subject", async (req, res, next) => {
+  if (!("newSubject" in req.body) || !("questionId" in req.body)) {
+    return next({type: "MalformedRequest", errorText: "Malformed request, missing newSubject or questionId from message body."});
   }
-  if (typeof req.body.newCategory !== "string" || typeof req.body.questionId !== "string") {
-    return next({type: "MalformedRequest", errorText: "Malformed request, newCategory or questionId is of incorrect type."});
+  if (typeof req.body.newSubject !== "string" || typeof req.body.questionId !== "string") {
+    return next({type: "MalformedRequest", errorText: "Malformed request, newSubject or questionId is of incorrect type."});
   }
 
   const queryString = `
     UPDATE public.question
     SET subject = $1
-    WHERE id = $2;
+    WHERE id = $2
+    RETURNING subject;
   `;
-  const parameters = [req.body.newCategory, req.body.questionId];
+  const parameters = [req.body.newSubject, req.body.questionId];
 
   await db.query(queryString, parameters, (err, result) => {
     if (err) {
       return next({type: "DatabaseError", content: "Database error."});
     } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", content: "Failed to modify an question's category."})
+      return next({type: "DatabaseError", content: "Failed to modify an question's subject."})
     } else {
-      return res.json({response: "Question's category changed successfully."});
+      return res.status(200).json({subject: result.rows[0].subject});
     }
   });
 });

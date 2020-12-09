@@ -1,0 +1,6 @@
+PUT http://localhost:3001/api/answer/invertiscorrect
+Content-Type: application/json
+
+{
+  "answerId": "67"
+}

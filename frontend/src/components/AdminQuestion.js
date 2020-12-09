@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/Input';
 import {Context} from '../utility/provider.js';
-import {toggleAnswerCorrectness, inputAnswerContent, deleteAnswer, addAnswer} from '../utility/callbacks';
+import {toggleAnswerCorrectness, inputAnswerString, deleteAnswer, addAnswer} from '../utility/callbacks';
 
 const AdminQuestion = ({examIndex, questionIndex}) => {
   const {state, dispatch} = useContext(Context);
@@ -16,15 +16,15 @@ const AdminQuestion = ({examIndex, questionIndex}) => {
         <div key={answer.id}>
           <Checkbox 
             color="primary" 
-            onChange={toggleAnswerCorrectness(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].isCorrectAnswer)} 
-            checked={answer.isCorrectAnswer}/>
+            onChange={toggleAnswerCorrectness(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].id)} 
+            checked={answer.isAnswerCorrect}/>
           <TextField
             value={answer.answerString}
-            onChange={inputAnswerContent(dispatch, examIndex, questionIndex, answerIndex)} />
-          <Button  onClick={deleteAnswer(dispatch, examIndex, questionIndex, answerIndex)}><DeleteIcon/></Button>
+            onChange={inputAnswerString(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].id)} />
+          <Button  onClick={deleteAnswer(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].id)}><DeleteIcon/></Button>
         </div>
       )}
-      <Button onClick={addAnswer(dispatch, examIndex, questionIndex)}><AddIcon/></Button>
+      <Button onClick={addAnswer(dispatch, examIndex, questionIndex, state.exams[examIndex].questions[questionIndex].id)}><AddIcon/></Button>
     </div>
   );
 }

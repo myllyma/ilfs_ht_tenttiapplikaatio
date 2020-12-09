@@ -3,5 +3,5 @@ Content-Type: application/json
 
 {
   "questionId": "13",
-  "newQuestionString": "testikysymys asdf"
+  "newQuestionString": "testikysymys"
 }

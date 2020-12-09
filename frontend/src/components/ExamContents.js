@@ -7,16 +7,21 @@ import {userTogglesDoneWithAnswering} from '../utility/callbacks';
 const ExamContents = () => {
   const {state, dispatch} = useContext(Context);
 
-  return(
-    <div>
+  if (!("exams" in state) || !state.exams[state.activeExam]) {
+    return (<div/>);
+  } else {
+    return(
       <div>
-        {state.exams[state.activeExam].questions.map((question, questionIndex) => 
-            <Questions key={question.id} examIndex={state.activeExam} questionIndex={questionIndex}/>
-        )}
+        <div>
+          {state.exams[state.activeExam].questions.map((question, questionIndex) => 
+              question &&
+              <Questions key={question.id} examIndex={state.activeExam} questionIndex={questionIndex}/>
+          )}
+        </div>
+        {!state.showAnswers && <Button variant="contained" color="primary" onClick={userTogglesDoneWithAnswering(dispatch)}>Näytä vastaukset</Button>}
       </div>
-      {!state.showAnswers && <Button variant="contained" color="primary" onClick={userTogglesDoneWithAnswering(dispatch)}>Näytä vastaukset</Button>}
-    </div>
-  );
+    );
+  }
 }
 
 export default ExamContents;

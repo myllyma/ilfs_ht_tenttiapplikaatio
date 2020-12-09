@@ -1,7 +1,0 @@
-PUT http://localhost:3001/api/answer/iscorrect
-Content-Type: application/json
-
-{
-  "answerId": "67",
-  "newIsCorrectAnswer": false
-}

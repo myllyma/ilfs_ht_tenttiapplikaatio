@@ -1,6 +1,1 @@
-DELETE http://localhost:3001/api/exam/
-Content-Type: application/json
-
-{
-  "examId": "12"
-}
+DELETE http://localhost:3001/api/exam/15
