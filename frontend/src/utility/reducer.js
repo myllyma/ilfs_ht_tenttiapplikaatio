@@ -35,7 +35,7 @@ const reducer = (state, action) => {
       return(newProgramState);
 
     case "INPUT_EXAM_NAME":
-      newProgramState.exams[action.examIndex].examName = action.name;
+      newProgramState.exams[action.examIndex].name = action.name;
       return(newProgramState);
 
 

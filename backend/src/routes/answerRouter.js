@@ -110,7 +110,10 @@ answerRouter.put("/answer/toggleiscorrect", async (req, res, next) => {
     } else if (result.rowCount === 0) {
       return next({type: "DatabaseAddFail", content: "Failed to modify an answer's display string."})
     } else {
-      return res.status(200).json({isAnswerCorrect: result.rows[0].is_answer_correct});
+      const responseObject = {
+        isAnswerCorrect: result.rows[0].is_answer_correct
+      }
+      return res.status(200).json(responseObject);
     }
   });
 });

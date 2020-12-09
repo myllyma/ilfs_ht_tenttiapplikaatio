@@ -62,7 +62,7 @@ const inputExamName = (dispatch, examIndex, examId) => (event)  => {
       return;
     }
     console.log("Response to inputExamName: ", response);
-    dispatch({type: "INPUT_EXAM_NAME", examIndex, examNameString: event.target.value});
+    dispatch({type: "INPUT_EXAM_NAME", examIndex, examNameString: response.data.name});
   })();
 }
 
@@ -105,7 +105,7 @@ const inputQuestionContent = (dispatch, examIndex, questionIndex, questionId) =>
       return;
     }
     console.log("Response to inputQuestionContent: ", response);
-    dispatch({type: "INPUT_QUESTION_CONTENT", examIndex, questionIndex, questionString: event.target.value});
+    dispatch({type: "INPUT_QUESTION_CONTENT", examIndex, questionIndex, questionString: response.data.questionString});
   })();
 }
 
@@ -119,7 +119,7 @@ const inputQuestionSubject = (dispatch, examIndex, questionIndex, questionId) =>
       return;
     }
     console.log("Response to inputQuestionSubject: ", response);
-    dispatch({type: "INPUT_QUESTION_SUBJECT", examIndex, questionIndex, subject: event.target.value});
+    dispatch({type: "INPUT_QUESTION_SUBJECT", examIndex, questionIndex, subject: response.data.subject});
   })();
 }
 

@@ -21,9 +21,9 @@ const AdminExamSelectionList = () => {
             <CheckIcon onClick={switchExam(dispatch, examIndex)} />
             <TextField 
               value={exam.name}
-              onChange={inputExamName(dispatch, examIndex, state.exams)}
+              onChange={inputExamName(dispatch, examIndex, state.exams[state.activeExam].id)}
               label="Kurssin nimi" />
-            <DeleteIcon onClick={deleteExam(dispatch, examIndex)} />
+            <DeleteIcon onClick={deleteExam(dispatch, examIndex, state.exams[state.activeExam].id)} />
           </Button> 
         )}
         <Button onClick={addExam(dispatch)}><AddIcon/></Button>

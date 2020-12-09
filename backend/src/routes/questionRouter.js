@@ -82,7 +82,10 @@ questionRouter.put("/question/questionstring", async (req, res, next) => {
     } else if (result.rowCount === 0) {
       return next({type: "DatabaseError", content: "Failed to modify an question's display string."})
     } else {
-      return res.status(200).json({questionString: result.rows[0].question_text});
+      const responseObject = {
+        questionString: result.rows[0].question_text
+      }
+      return res.status(200).json(responseObject);
     }
   });
 });
@@ -110,7 +113,10 @@ questionRouter.put("/question/subject", async (req, res, next) => {
     } else if (result.rowCount === 0) {
       return next({type: "DatabaseError", content: "Failed to modify an question's subject."})
     } else {
-      return res.status(200).json({subject: result.rows[0].subject});
+      const responseObject = {
+        subject: result.rows[0].subject
+      }
+      return res.status(200).json(responseObject);
     }
   });
 });

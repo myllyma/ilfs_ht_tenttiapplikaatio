@@ -176,7 +176,8 @@ examRouter.put("/exam/name", async (req, res, next) => {
   const queryString = `
     UPDATE public.exam
     SET name = $1
-    WHERE id = $2;
+    WHERE id = $2
+    RETURNING name;
   `;
   const parameters = [req.body.newExamName, req.body.examId];
 
@@ -186,7 +187,10 @@ examRouter.put("/exam/name", async (req, res, next) => {
     } else if (result.rowCount === 0) {
       return next({type: "DatabaseError", content: "Failed to modify an exam's name."})
     } else {
-      return res.status(200).json({response: "Exam name changed successfully."});
+      const responseObject = {
+        name: result.rows[0].name
+      }
+      return res.status(200).json(responseObject);
     }
   });
 });
