@@ -11,28 +11,31 @@ questionRouter.post("/question/", async (req, res, next) => {
   }
 
   const queryString = `
-    INSERT INTO public.question (exam_id, question_text, subject)
+    INSERT INTO question (exam_id, question_text, subject)
     VALUES ($1, '', '')
     RETURNING id;
   `;
   const parameters = [req.body.examId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", errorText: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", errorText: "Failed to add a new question to database."})
-    } else {
-      const responseObject = {
-        id: result.rows[0].id,
-        examId: req.body.examId,
-        questionString: "",
-        subject: "",
-        answers: []
-      }
-      return res.status(200).json(responseObject);
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database error."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "DatabaseError", errorText: "Failed to add a new question to database."});
+  }
+
+  const responseObject = {
+    id: result.rows[0].id,
+    examId: req.body.examId,
+    questionString: "",
+    subject: "",
+    answers: []
+  }
+  return res.status(200).json(responseObject);
 });
 
 // Delete a question
@@ -49,14 +52,15 @@ questionRouter.delete("/question/:questionId", async (req, res, next) => {
     WHERE question.id = $1
   `;
   const parameters = [req.params.questionId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", errorText: "Database error."});
-    } else {
-      return res.status(200).end();
-    }
-  });
+  try {
+    result = db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database error."});
+  }
+
+  return res.status(200).end();
 });
 
 // Set question string
@@ -75,19 +79,20 @@ questionRouter.put("/question/questionstring", async (req, res, next) => {
     RETURNING question_text;
   `;
   const parameters = [req.body.newQuestionString, req.body.questionId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", content: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", content: "Failed to modify an question's display string."})
-    } else {
-      const responseObject = {
-        questionString: result.rows[0].question_text
-      }
-      return res.status(200).json(responseObject);
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database error."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "DatabaseError", content: "Failed to modify an question's display string."})
+  }
+
+  const responseObject = {questionString: result.rows[0].question_text};
+  return res.status(200).json(responseObject);
 });
 
 // Set question subject
@@ -106,19 +111,22 @@ questionRouter.put("/question/subject", async (req, res, next) => {
     RETURNING subject;
   `;
   const parameters = [req.body.newSubject, req.body.questionId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", content: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", content: "Failed to modify an question's subject."})
-    } else {
-      const responseObject = {
-        subject: result.rows[0].subject
-      }
-      return res.status(200).json(responseObject);
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", content: "Database error."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "DatabaseError", content: "Failed to modify an question's subject."});
+  }
+
+  const responseObject = {
+    subject: result.rows[0].subject
+  }
+  return res.status(200).json(responseObject);
 });
 
 module.exports = questionRouter;

@@ -13,8 +13,6 @@ And backend development version can be executed with:
 # Project state
 
 -Currently, since the database is not public, the backend cannot get data, thus no functionality.
--Server implementation basically complete. Routes and SQL calls for the basic set of commands essentially complete (with a slight addition needed for GET routes to massage data into a better form for the frontend).
--Frontend has not yet matched up to the changes made to backend during its development round.
 -No concept of "user" in either frontend or backend yet, only in database.
 -Login not implemented.
 -Concept of "course" to attach exams to has not yet implemented in routes or frontend.

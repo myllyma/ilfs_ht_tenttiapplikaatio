@@ -16,23 +16,26 @@ answerRouter.post("/answer/", async (req, res, next) => {
     RETURNING id;
   `;
   const parameters = [req.body.questionId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", errorText: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseAddFail", errorText: "Failed to add a new question to database."})
-    } else {
-      const responseObject = {
-        id: result.rows[0].id, 
-        questionId: req.body.questionId,
-        answerString: "", 
-        isAnswerCorrect: false,
-        isChecked: false
-      }
-      return res.status(200).json(responseObject);
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database error."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "DatabaseAddFail", errorText: "Failed to add a new question to database."});
+  }
+
+  const responseObject = {
+    id: result.rows[0].id, 
+    questionId: req.body.questionId,
+    answerString: "", 
+    isAnswerCorrect: false,
+    isChecked: false
+  }
+  return res.status(200).json(responseObject);
 });
 
 // Delete an answer
@@ -49,14 +52,15 @@ answerRouter.delete("/answer/:answerId", async (req, res, next) => {
     WHERE answer.id = $1
   `;
   const parameters = [req.params.answerId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", errorText: "Database error."});
-    } else {
-      return res.status(200).end();
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database error."});
+  }
+
+  return res.status(200).end();
 });
 
 // Set answer string
@@ -75,16 +79,20 @@ answerRouter.put("/answer/answerstring", async (req, res, next) => {
     RETURNING answer_text;
   `;
   const parameters = [req.body.newAnswerString, req.body.answerId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", content: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseAddFail", content: "Failed to modify an answer's display string."})
-    } else {
-      return res.status(200).json({answerString: result.rows[0].answer_text});
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", content: "Database error."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "DatabaseAddFail", content: "Failed to modify an answer's display string."});
+  }
+
+  const responseObject = {answerString: result.rows[0].answer_text};
+  return res.status(200).json(responseObject);
 });
 
 // Invert answer truth state
@@ -103,19 +111,20 @@ answerRouter.put("/answer/toggleiscorrect", async (req, res, next) => {
     RETURNING is_answer_correct;
   `;
   const parameters = [req.body.answerId];
+  let result
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", content: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseAddFail", content: "Failed to modify an answer's display string."})
-    } else {
-      const responseObject = {
-        isAnswerCorrect: result.rows[0].is_answer_correct
-      }
-      return res.status(200).json(responseObject);
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", content: "Database error."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "DatabaseAddFail", content: "Failed to modify an answer's display string."})
+  }
+
+  const responseObject = {isAnswerCorrect: result.rows[0].is_answer_correct};
+  return res.status(200).json(responseObject);
 });
 
 module.exports = answerRouter;

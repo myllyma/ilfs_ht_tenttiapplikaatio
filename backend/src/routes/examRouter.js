@@ -75,17 +75,20 @@ examRouter.get("/exam/getspecific/:examId", async (req, res, next) => {
     WHERE exam.id = $1;
   `;
   const parameters = [req.params.examId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", errorText: "Database search error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "NoContent", errorText: "Exam by given ID does not exist."});
-    } else {
-      const examObject = constructExamObject(result.rows);
-      return res.status(200).json(examObject);
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database search error."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "NoContent", errorText: "Exam by given ID does not exist."});
+  }
+
+  const examObject = constructExamObject(result.rows);
+  return res.status(200).json(examObject);
 });
 
 examRouter.get("/exam/permittedexams", async (req, res, next) => {
@@ -94,17 +97,20 @@ examRouter.get("/exam/permittedexams", async (req, res, next) => {
     FROM exam;
   `;
   const parameters = [];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", errorText: "Database search error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "NoContent", errorText: "Exam by given ID does not exist."});
-    } else {
-      const permittedExams = result.rows;
-      return res.status(200).json(permittedExams);
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database search error."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "NoContent", errorText: "Exam by given ID does not exist."});
+  }
+
+  const permittedExams = result.rows;
+  return res.status(200).json(permittedExams);
 });
 
 // Post a new exam
@@ -122,22 +128,25 @@ examRouter.post("/exam/", async (req, res, next) => {
     RETURNING id;
   `;
   const parameters = [req.body.courseId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", errorText: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", errorText: "Failed to add a new exam to database."})
-    } else {
-      const responseObject = {
-        id: result.rows[0].id,
-        courseId: req.body.courseId,
-        name: "",
-        questions: []
-      }
-      return res.status(200).json(responseObject);
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database error."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "DatabaseError", errorText: "Failed to add a new exam to database."})
+  }
+
+  const responseObject = {
+    id: result.rows[0].id,
+    courseId: req.body.courseId,
+    name: "",
+    questions: []
+  }
+  return res.status(200).json(responseObject);
 });
 
 // Delete an exam
@@ -180,19 +189,22 @@ examRouter.put("/exam/name", async (req, res, next) => {
     RETURNING name;
   `;
   const parameters = [req.body.newExamName, req.body.examId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", content: "Database error."});
-    } else if (result.rowCount === 0) {
-      return next({type: "DatabaseError", content: "Failed to modify an exam's name."})
-    } else {
-      const responseObject = {
-        name: result.rows[0].name
-      }
-      return res.status(200).json(responseObject);
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database error during login."});
+  }
+
+  if (result.rowCount === 0) {
+    return next({type: "DatabaseError", content: "Failed to modify an exam's name."});
+  }
+
+  const responseObject = {
+    name: result.rows[0].name
+  }
+  return res.status(200).json(responseObject);
 });
 
 module.exports = examRouter;
