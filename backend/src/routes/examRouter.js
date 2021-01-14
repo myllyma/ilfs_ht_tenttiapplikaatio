@@ -2,6 +2,11 @@ const examRouter = require("express").Router();
 const db = require("../utils/pgdb");
 
 const constructExamObject = (data) => {
+  // Safety latch if there are no rows.
+  if (data.length < 1) {
+    return (null);
+  }
+
   // Construct the base exam object
   const examObject = {
     id: data[0].examid, 
@@ -9,10 +14,6 @@ const constructExamObject = (data) => {
     courseId: data[0].courseid,
     questions: []
   };
-
-  if (data.length < 1) { // Safety latch if there are no rows.
-    return (null);
-  }
 
   // Construct the questions and answers for the exam.
   data.forEach((row) => {
@@ -62,7 +63,7 @@ const constructExamObject = (data) => {
   return examObject;
 }
 
-// Get an individual exam by id
+// Get an individual exam's contents by id.
 examRouter.get("/exam/getspecific/:examId", async (req, res, next) => {
   const queryString = `
     SELECT  course.id as courseid, exam.id as examid, question.id as questionid, answer.id as answerid, 
@@ -72,7 +73,8 @@ examRouter.get("/exam/getspecific/:examId", async (req, res, next) => {
     FULL JOIN question ON answer.question_id = question.id
     FULL JOIN exam ON question.exam_id = exam.id
     FULL JOIN course ON exam.course_id = course.id
-    WHERE exam.id = $1;
+    WHERE exam.id = $1
+    ORDER BY courseid, examid, answerid;
   `;
   const parameters = [req.params.examId];
   let result;
@@ -91,6 +93,7 @@ examRouter.get("/exam/getspecific/:examId", async (req, res, next) => {
   return res.status(200).json(examObject);
 });
 
+// Get a list of exams permitted for the user.
 examRouter.get("/exam/permittedexams", async (req, res, next) => {
   const queryString = `
     SELECT exam.id as examId, exam.name as examName

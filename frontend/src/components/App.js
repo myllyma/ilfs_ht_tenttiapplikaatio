@@ -9,6 +9,14 @@ import ExamContents from "../components/ExamContents";
 import AdminExamSelectionList from "../components/AdminExamSelectionList";
 import AdminExamContents from "../components/AdminExamContents";
 import Visualization from "./Visualization";
+import {IntlProvider} from "react-intl";
+import messages_fi from "../translations/fi.js";
+import messages_en from "../translations/en.js";
+
+const messages = {
+  "fi": messages_fi,
+  "en": messages_en
+}
 
 const App = () => {
   const {state, dispatch} = useContext(Context);
@@ -27,6 +35,7 @@ const App = () => {
         newProgramState.admin = false;
         newProgramState.visiblePage = "EXAMS";
         newProgramState.exams = examList
+        newProgramState.language = "fi";
         dispatch({type: "INIT", payload: newProgramState});
     })();                  
   }, [dispatch]);
@@ -35,47 +44,55 @@ const App = () => {
 
   if (!("exams" in state)) {
     return(
-      <div>
-        <Header/>
-      </div>
+      <IntlProvider messages={messages.fi} locale="fi" defaultLocale="fi">
+        <div>
+          <Header/>
+        </div>
+      </IntlProvider>
     );
   }
 
   switch (state.visiblePage) {
     case "EXAMS":
       return (
-        <div className="App">
-          <Header/>
-          <main className="mainContent">
-            {!state.admin ?
-            <>
-              <ExamSelectionList/>
-              <ExamContents/>
-            </>
-            :
-            <>
-              <AdminExamSelectionList/>
-              <AdminExamContents/>
-            </>}
-          </main>
-        </div>
+        <IntlProvider messages={messages.fi} locale="fi" defaultLocale="fi">
+          <div className="App">
+            <Header/>
+            <main className="mainContent">
+              {!state.admin ?
+              <>
+                <ExamSelectionList/>
+                <ExamContents/>
+              </>
+              :
+              <>
+                <AdminExamSelectionList/>
+                <AdminExamContents/>
+              </>}
+            </main>
+          </div>
+        </IntlProvider>
       );
 
      case "VISUALIZATION":
       return (
-        <div className="App">
-          <Header/>
-          <main className="mainContent">
-            <Visualization/>
-          </main>
-        </div>
+        <IntlProvider messages={messages.fi} locale="fi" defaultLocale="fi">
+          <div className="App">
+            <Header/>
+            <main className="mainContent">
+              <Visualization/>
+            </main>
+          </div>
+        </IntlProvider>
       );
 
     default:
       return(
-        <div>
-          <Header/>
-        </div>
+        <IntlProvider messages={messages.fi} locale="fi" defaultLocale="fi">
+          <div>
+            <Header/>
+          </div>
+        </IntlProvider>
       );
   }
   

@@ -1,8 +1,9 @@
 import {useContext} from 'react';
 import {Context} from '../utility/provider.js';
-import {toggleAdmin, togglePage} from '../utility/callbacks';
+import {toggleAdmin, togglePage, changeLanguage} from '../utility/callbacks';
 import Button from '@material-ui/core/Button';
 import {withStyles} from '@material-ui/core/styles';
+import { FormattedMessage } from 'react-intl';
 
 const MenuButton = withStyles({
   root: {
@@ -30,25 +31,36 @@ const Header = () => {
     <header className="Header">
       <nav className="navBar">
         <MenuButton className="navBarItem" onClick={togglePage(dispatch, "EXAMS")}>
-          Tentit
+          <FormattedMessage id="header_exams"/>
         </MenuButton>
         <MenuButton className="navBarItem" onClick={togglePage(dispatch, "EXAMS")}>
-          Tietoa sovelluksesta
+          <FormattedMessage id="header_info"/>
         </MenuButton>
         <MenuButton className="navBarItem" onClick={togglePage(dispatch, "VISUALIZATION")}>
-          Visualisaatio
+          <FormattedMessage id="header_visualization"/>
         </MenuButton>
         {!state.admin ? 
           <MenuButton className="navBarItem" onClick={toggleAdmin(dispatch)}>
-            Admin-tilaan vaihto
+            <FormattedMessage id="header_admin_switch_admin"/>
           </MenuButton>
           :
           <MenuButton className="navBarItem" onClick={toggleAdmin(dispatch)}>
-            Pois admin-tilasta
+            <FormattedMessage id="header_admin_switch_user"/>
           </MenuButton>
         }
+        {
+          state.language === "fi" ?
+            <MenuButton className="navBarItem languageButton" onClick={changeLanguage(dispatch, "en")}>
+              <FormattedMessage id="language_selector_en"/>
+            </MenuButton>
+            :
+            <MenuButton className="navBarItem languageButton" onClick={changeLanguage(dispatch, "fi")}>
+              <FormattedMessage id="language_selector_fi"/>
+            </MenuButton>
+        }
+        
         <MenuButton className="navBarItem exitButton" onClick={togglePage(dispatch, "EXAMS")}>
-          Kirjaudu ulos
+          <FormattedMessage id="header_logout"/>
         </MenuButton>
       </nav>
     </header>

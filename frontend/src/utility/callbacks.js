@@ -23,6 +23,10 @@ const togglePage = (dispatch, page) => () => {
   dispatch({type: "TOGGLE_PAGE", page});
 }
 
+const changeLanguage = (dispatch, language) => () => {
+  dispatch({type: "CHANGE_LANGUAGE", language});
+}
+
 // -----------------------------------
 // Exam related callbacks
 // -----------------------------------
@@ -185,6 +189,7 @@ export {
   userTogglesDoneWithAnswering,
   toggleAdmin,
   togglePage,
+  changeLanguage,
   addExam,
   addQuestion,
   addAnswer,

@@ -24,6 +24,9 @@ const reducer = (state, action) => {
       newProgramState.visiblePage = action.page;
       return(newProgramState);
 
+    case "CHANGE_LANGUAGE":
+      newProgramState.language = action.language;
+      return(newProgramState);
 
     // Exam operations
     case "ADD_EXAM":
