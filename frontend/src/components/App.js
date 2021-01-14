@@ -1,17 +1,15 @@
 import "../css/App.css";
 import axios from "axios";
-import Header from "../components/Header";
 import {useContext, useEffect} from "react";
+import {IntlProvider} from "react-intl";
+
+
 import {Context} from "../utility/provider.js";
 import {SERVER_URI} from "../utility/config"
-import ExamSelectionList from "../components/ExamSelectionList";
-import ExamContents from "../components/ExamContents";
-import AdminExamSelectionList from "../components/AdminExamSelectionList";
-import AdminExamContents from "../components/AdminExamContents";
-import Visualization from "./Visualization";
-import {IntlProvider} from "react-intl";
 import messages_fi from "../translations/fi.js";
 import messages_en from "../translations/en.js";
+
+import MainDisplay from "./MainDisplay";
 
 const messages = {
   "fi": messages_fi,
@@ -42,60 +40,11 @@ const App = () => {
 
   console.log(state);
 
-  if (!("exams" in state)) {
-    return(
-      <IntlProvider messages={messages.fi} locale="fi" defaultLocale="fi">
-        <div>
-          <Header/>
-        </div>
-      </IntlProvider>
-    );
-  }
-
-  switch (state.visiblePage) {
-    case "EXAMS":
-      return (
-        <IntlProvider messages={messages.fi} locale="fi" defaultLocale="fi">
-          <div className="App">
-            <Header/>
-            <main className="mainContent">
-              {!state.admin ?
-              <>
-                <ExamSelectionList/>
-                <ExamContents/>
-              </>
-              :
-              <>
-                <AdminExamSelectionList/>
-                <AdminExamContents/>
-              </>}
-            </main>
-          </div>
-        </IntlProvider>
-      );
-
-     case "VISUALIZATION":
-      return (
-        <IntlProvider messages={messages.fi} locale="fi" defaultLocale="fi">
-          <div className="App">
-            <Header/>
-            <main className="mainContent">
-              <Visualization/>
-            </main>
-          </div>
-        </IntlProvider>
-      );
-
-    default:
-      return(
-        <IntlProvider messages={messages.fi} locale="fi" defaultLocale="fi">
-          <div>
-            <Header/>
-          </div>
-        </IntlProvider>
-      );
-  }
-  
+  return(
+    <IntlProvider messages={messages[state.language]} locale={state.language} defaultLocale="fi">
+      <MainDisplay/>
+    </IntlProvider>
+  );
 }
 
 export default App;

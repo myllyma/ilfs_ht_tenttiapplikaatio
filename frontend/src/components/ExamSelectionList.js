@@ -10,7 +10,7 @@ const ExamSelectionList = () => {
     return (<div/>);
   } else {
     return (
-      <div>
+      <div className="ExamList">
         {state.exams.map((exam, examIndex) => 
           exam &&
           <Button key={exam.id} color="primary" className="ExamSelectionListItem" onClick={switchExam(dispatch, examIndex)}>
