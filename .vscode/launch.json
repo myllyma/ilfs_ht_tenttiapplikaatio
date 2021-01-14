@@ -10,15 +10,6 @@
       "request": "launch",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}"
-    },
-    {
-      "name": "Debug backend",
-      "type": "node",
-      "program": "${workspaceFolder}\\server\\index.js",
-      "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**"
-      ]
     }
   ]
 }

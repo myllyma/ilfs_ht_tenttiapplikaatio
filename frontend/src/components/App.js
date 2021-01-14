@@ -3,7 +3,6 @@ import axios from "axios";
 import {useContext, useEffect} from "react";
 import {IntlProvider} from "react-intl";
 
-
 import {Context} from "../utility/provider.js";
 import {SERVER_URI} from "../utility/config"
 import messages_fi from "../translations/fi.js";
