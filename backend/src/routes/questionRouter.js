@@ -25,7 +25,7 @@ questionRouter.post("/question/", async (req, res, next) => {
   }
 
   if (result.rowCount === 0) {
-    return next({type: "DatabaseError", errorText: "Failed to add a new question to database."});
+    return next({type: "DatabaseError", errorText: "Failed to add a new resource to database."});
   }
 
   const responseObject = {
@@ -88,10 +88,13 @@ questionRouter.put("/question/questionstring", async (req, res, next) => {
   }
 
   if (result.rowCount === 0) {
-    return next({type: "DatabaseError", content: "Failed to modify an question's display string."})
+    return next({type: "ResourceNotLocated", content: "Indicated resource not in database."});
   }
 
-  const responseObject = {questionString: result.rows[0].question_text};
+  const responseObject = {
+    questionString: result.rows[0].question_text
+  };
+
   return res.status(200).json(responseObject);
 });
 
@@ -120,7 +123,7 @@ questionRouter.put("/question/subject", async (req, res, next) => {
   }
 
   if (result.rowCount === 0) {
-    return next({type: "DatabaseError", content: "Failed to modify an question's subject."});
+    return next({type: "ResourceNotLocated", content: "Indicated resource not in database."});
   }
 
   const responseObject = {

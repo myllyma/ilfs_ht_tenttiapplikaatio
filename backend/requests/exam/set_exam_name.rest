@@ -2,6 +2,6 @@ PUT http://localhost:3001/api/exam/name
 Content-Type: application/json
 
 {
-  "examId": "4",
+  "examId": "16",
   "newExamName": "this is a test"
 }

@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/exam/getspecific/4
+GET http://localhost:3001/api/exam/4

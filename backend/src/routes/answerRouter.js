@@ -25,7 +25,7 @@ answerRouter.post("/answer/", async (req, res, next) => {
   }
 
   if (result.rowCount === 0) {
-    return next({type: "DatabaseAddFail", errorText: "Failed to add a new question to database."});
+    return next({type: "DatabaseError", errorText: "Failed to add a new resource to database."});
   }
 
   const responseObject = {
@@ -88,10 +88,13 @@ answerRouter.put("/answer/answerstring", async (req, res, next) => {
   }
 
   if (result.rowCount === 0) {
-    return next({type: "DatabaseAddFail", content: "Failed to modify an answer's display string."});
+    return next({type: "ResourceNotLocated", content: "Indicated resource not in database."});
   }
 
-  const responseObject = {answerString: result.rows[0].answer_text};
+  const responseObject = {
+    answerString: result.rows[0].answer_text
+  };
+
   return res.status(200).json(responseObject);
 });
 
@@ -120,10 +123,13 @@ answerRouter.put("/answer/toggleiscorrect", async (req, res, next) => {
   }
 
   if (result.rowCount === 0) {
-    return next({type: "DatabaseAddFail", content: "Failed to modify an answer's display string."})
+    return next({type: "ResourceNotLocated", content: "Indicated resource not in database."});
   }
 
-  const responseObject = {isAnswerCorrect: result.rows[0].is_answer_correct};
+  const responseObject = {
+    isAnswerCorrect: result.rows[0].is_answer_correct
+  };
+  
   return res.status(200).json(responseObject);
 });
 

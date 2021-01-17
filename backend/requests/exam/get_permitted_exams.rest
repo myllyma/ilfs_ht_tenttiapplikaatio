@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/exam/permittedexams
+GET http://localhost:3001/api/exam/permitted

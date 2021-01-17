@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const morgan = require("morgan");
 const userRouter = require("./routes/userRouter");
 const answerRouter = require("./routes/answerRouter");
 const questionRouter = require("./routes/questionRouter");
@@ -9,6 +10,7 @@ const middleware = require("./utils/middleware");
 const server = express();
 server.use(cors({origin: "http://localhost:3000", optionsSuccessStatus:200}));
 server.use(express.json());
+server.use(morgan('dev'));
 server.use("/api", userRouter);
 server.use("/api", answerRouter);
 server.use("/api", questionRouter);

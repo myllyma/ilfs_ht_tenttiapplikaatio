@@ -2,8 +2,27 @@ const examRouter = require("express").Router();
 const db = require("../utils/pgdb");
 const constructExamObject = require("../utils/utility");
 
+// Get a list of exams permitted for the user.
+examRouter.get("/exam/permitted", async (req, res, next) => {
+  const queryString = `
+    SELECT exam.id as examId, exam.name as examName
+    FROM exam;
+  `;
+  const parameters = [];
+  let result;
+
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database search error."});
+  }
+
+  const permittedExams = result.rows;
+  return res.status(200).json(permittedExams);
+});
+
 // Get an individual exam's contents by id.
-examRouter.get("/exam/getspecific/:examId", async (req, res, next) => {
+examRouter.get("/exam/:examId", async (req, res, next) => {
   const queryString = `
     SELECT  course.id as courseid, exam.id as examid, question.id as questionid, answer.id as answerid, 
             exam.name as examname, question.question_text as questionstring, question.subject as subject, 
@@ -25,34 +44,11 @@ examRouter.get("/exam/getspecific/:examId", async (req, res, next) => {
   }
 
   if (result.rowCount === 0) {
-    return next({type: "NoContent", errorText: "Exam by given ID does not exist."});
+    ({type: "ResourceNotLocated", content: "Indicated resource not in database."});
   }
 
   const examObject = constructExamObject(result.rows);
   return res.status(200).json(examObject);
-});
-
-// Get a list of exams permitted for the user.
-examRouter.get("/exam/permittedexams", async (req, res, next) => {
-  const queryString = `
-    SELECT exam.id as examId, exam.name as examName
-    FROM exam;
-  `;
-  const parameters = [];
-  let result;
-
-  try {
-    result = await db.query(queryString, parameters);
-  } catch (err) {
-    return next({type: "DatabaseError", errorText: "Database search error."});
-  }
-
-  if (result.rowCount === 0) {
-    return next({type: "NoContent", errorText: "Exam by given ID does not exist."});
-  }
-
-  const permittedExams = result.rows;
-  return res.status(200).json(permittedExams);
 });
 
 // Post a new exam
@@ -79,7 +75,7 @@ examRouter.post("/exam/", async (req, res, next) => {
   }
 
   if (result.rowCount === 0) {
-    return next({type: "DatabaseError", errorText: "Failed to add a new exam to database."})
+    return next({type: "DatabaseError", errorText: "Failed to add a new resource to database."});
   }
 
   const responseObject = {
@@ -105,14 +101,15 @@ examRouter.delete("/exam/:examId", async (req, res, next) => {
     WHERE exam.id = $1
   `;
   const parameters = [req.params.examId];
+  let result;
 
-  await db.query(queryString, parameters, (err, result) => {
-    if (err) {
-      return next({type: "DatabaseError", errorText: "Database error."});
-    } else {
-      return res.status(200).end();
-    }
-  });
+  try {
+    result = await db.query(queryString, parameters);
+  } catch (err) {
+    return next({type: "DatabaseError", errorText: "Database error."});
+  }
+
+  return res.status(200).end();
 });
 
 // Set exam name
@@ -140,12 +137,13 @@ examRouter.put("/exam/name", async (req, res, next) => {
   }
 
   if (result.rowCount === 0) {
-    return next({type: "DatabaseError", content: "Failed to modify an exam's name."});
+    return next({type: "ResourceNotLocated", content: "Indicated resource not in database."});
   }
 
   const responseObject = {
     name: result.rows[0].name
   }
+  
   return res.status(200).json(responseObject);
 });
 
