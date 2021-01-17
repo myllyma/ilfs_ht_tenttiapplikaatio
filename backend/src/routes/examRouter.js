@@ -1,9 +1,10 @@
 const examRouter = require("express").Router();
 const db = require("../utils/pgdb");
 const constructExamObject = require("../utils/utility");
+const auth = require("../utils/auth");
 
 // Get a list of exams permitted for the user.
-examRouter.get("/exam/permitted", async (req, res, next) => {
+examRouter.get("/exam/permitted", auth.required, async (req, res, next) => {
   const queryString = `
     SELECT exam.id as examId, exam.name as examName
     FROM exam;
@@ -22,7 +23,7 @@ examRouter.get("/exam/permitted", async (req, res, next) => {
 });
 
 // Get an individual exam's contents by id.
-examRouter.get("/exam/:examId", async (req, res, next) => {
+examRouter.get("/exam/:examId", auth.required, async (req, res, next) => {
   const queryString = `
     SELECT  course.id as courseid, exam.id as examid, question.id as questionid, answer.id as answerid, 
             exam.name as examname, question.question_text as questionstring, question.subject as subject, 
@@ -52,7 +53,7 @@ examRouter.get("/exam/:examId", async (req, res, next) => {
 });
 
 // Post a new exam
-examRouter.post("/exam/", async (req, res, next) => {
+examRouter.post("/exam/", auth.required, async (req, res, next) => {
   if (!("courseId" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing courseId from message body."});
   }
@@ -88,7 +89,7 @@ examRouter.post("/exam/", async (req, res, next) => {
 });
 
 // Delete an exam
-examRouter.delete("/exam/:examId", async (req, res, next) => {
+examRouter.delete("/exam/:examId", auth.required, async (req, res, next) => {
   if (!("examId" in req.params)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing examId from message parameters."});
   }
@@ -113,7 +114,7 @@ examRouter.delete("/exam/:examId", async (req, res, next) => {
 });
 
 // Set exam name
-examRouter.put("/exam/name", async (req, res, next) => {
+examRouter.put("/exam/name", auth.required, async (req, res, next) => {
   if (!("examId" in req.body) || !("newExamName" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing examId or newExamName from message body."});
   }

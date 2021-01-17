@@ -1,8 +1,7 @@
-PUT http://localhost:3001/api/question/questionstring
+PUT http://localhost:3001/api/answer/toggleiscorrect
 Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InVzZXIzIiwicm9sZSI6InN0dWRlbnQiLCJpYXQiOjE2MTA5MTY4ODl9.BWq7ZzGR4IHJR1bBdR-Ntm0CZAXwCgbGvxjbkrrRhto
 Content-Type: application/json
 
 {
-  "questionId": "28",
-  "newQuestionString": "testikysymys"
+  "answerId": "92"
 }

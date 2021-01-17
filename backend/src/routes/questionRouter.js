@@ -1,8 +1,9 @@
 const questionRouter = require("express").Router();
 const db = require("../utils/pgdb");
+const auth = require("../utils/auth");
 
 // Post a new question
-questionRouter.post("/question/", async (req, res, next) => {
+questionRouter.post("/question/", auth.required, async (req, res, next) => {
   if (!("examId" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing examId from message body."});
   }
@@ -39,7 +40,7 @@ questionRouter.post("/question/", async (req, res, next) => {
 });
 
 // Delete a question
-questionRouter.delete("/question/:questionId", async (req, res, next) => {
+questionRouter.delete("/question/:questionId", auth.required, async (req, res, next) => {
   if (!("questionId" in req.params)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing questionId from message params."});
   }
@@ -64,7 +65,7 @@ questionRouter.delete("/question/:questionId", async (req, res, next) => {
 });
 
 // Set question string
-questionRouter.put("/question/questionstring", async (req, res, next) => {
+questionRouter.put("/question/questionstring", auth.required, async (req, res, next) => {
   if (!("newQuestionString" in req.body) || !("questionId" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing newQuestionString or questionId from message body."});
   }
@@ -99,7 +100,7 @@ questionRouter.put("/question/questionstring", async (req, res, next) => {
 });
 
 // Set question subject
-questionRouter.put("/question/subject", async (req, res, next) => {
+questionRouter.put("/question/subject", auth.required, async (req, res, next) => {
   if (!("newSubject" in req.body) || !("questionId" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing newSubject or questionId from message body."});
   }

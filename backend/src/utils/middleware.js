@@ -13,10 +13,9 @@ const errorHandler = (err, req, res, next) => {
     case "MalformedRequest":
       return res.status(400).json({error: err.errorText}).end();
     case "LoginError":
-      return res.status(400).json({error: err.errorText}).end();
+      return res.status(401).json({error: err.errorText}).end();
     case "SignupError":
       return res.status(400).json({error: err.errorText}).end();
-    
   }
 }
 

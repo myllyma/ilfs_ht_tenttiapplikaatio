@@ -1,4 +1,5 @@
 POST http://localhost:3001/api/exam
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InVzZXIzIiwicm9sZSI6InN0dWRlbnQiLCJpYXQiOjE2MTA5MTY4ODl9.BWq7ZzGR4IHJR1bBdR-Ntm0CZAXwCgbGvxjbkrrRhto
 Content-Type: application/json
 
 {

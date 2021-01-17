@@ -1,8 +1,9 @@
 const answerRouter = require("express").Router();
 const db = require("../utils/pgdb");
+const auth = require("../utils/auth");
 
 // Post a new answer
-answerRouter.post("/answer/", async (req, res, next) => {
+answerRouter.post("/answer/", auth.required, async (req, res, next) => {
   if (!("questionId" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing questionId from message params."});
   }
@@ -39,7 +40,7 @@ answerRouter.post("/answer/", async (req, res, next) => {
 });
 
 // Delete an answer
-answerRouter.delete("/answer/:answerId", async (req, res, next) => {
+answerRouter.delete("/answer/:answerId", auth.required, async (req, res, next) => {
   if (!("answerId" in req.params)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing answerId from message body."});
   }
@@ -64,7 +65,7 @@ answerRouter.delete("/answer/:answerId", async (req, res, next) => {
 });
 
 // Set answer string
-answerRouter.put("/answer/answerstring", async (req, res, next) => {
+answerRouter.put("/answer/answerstring", auth.required, async (req, res, next) => {
   if (!("newAnswerString" in req.body) || !("answerId" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing newAnswerString or answerId from message body."});
   }
@@ -99,7 +100,7 @@ answerRouter.put("/answer/answerstring", async (req, res, next) => {
 });
 
 // Invert answer truth state
-answerRouter.put("/answer/toggleiscorrect", async (req, res, next) => {
+answerRouter.put("/answer/toggleiscorrect", auth.required, async (req, res, next) => {
   if (!("answerId" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing answerId from message body."});
   }

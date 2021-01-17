@@ -1,7 +1,8 @@
 PUT http://localhost:3001/api/answer/answerstring
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InVzZXIzIiwicm9sZSI6InN0dWRlbnQiLCJpYXQiOjE2MTA5MTY4ODl9.BWq7ZzGR4IHJR1bBdR-Ntm0CZAXwCgbGvxjbkrrRhto
 Content-Type: application/json
 
 {
-  "answerId": "67",
+  "answerId": "92",
   "newAnswerString": "this is a test"
 }
