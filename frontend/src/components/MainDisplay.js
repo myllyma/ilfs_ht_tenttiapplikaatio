@@ -1,6 +1,7 @@
 import {useContext} from "react";
 import {Context} from "../utility/provider.js";
 
+import Login from "./Login";
 import Header from "./Header";
 import ExamSelectionList from "./ExamSelectionList";
 import ExamContents from "./ExamContents";
@@ -19,6 +20,13 @@ const MainDisplay = () => {
     );
   } else {
     switch (state.visiblePage) {
+      case "LOGIN":
+        return (
+          <div className="MainDisplay">
+            <Login/>
+          </div>
+        );
+
       case "EXAMS":
         return (
           <div className="MainDisplay">

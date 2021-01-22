@@ -1,10 +1,12 @@
 import {useContext} from 'react';
-import {Context} from '../utility/provider.js';
+
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
 import TextField from '@material-ui/core/TextField';
+
+import {Context} from '../utility/provider.js';
 import {switchExam, inputExamName, deleteExam, addExam} from '../utility/callbacks';
 
 const AdminExamSelectionList = () => {
@@ -21,12 +23,12 @@ const AdminExamSelectionList = () => {
             <CheckIcon onClick={switchExam(dispatch, examIndex)} />
             <TextField 
               value={exam.name}
-              onChange={inputExamName(dispatch, examIndex, state.exams[state.activeExam].id)}
+              onChange={inputExamName(dispatch, examIndex, state.exams[examIndex].id, state.user)}
               label="Kurssin nimi" />
-            <DeleteIcon onClick={deleteExam(dispatch, examIndex, state.exams[state.activeExam].id)} />
+            <DeleteIcon onClick={deleteExam(dispatch, examIndex, state.exams[examIndex].id, state.user)} />
           </Button> 
         )}
-        <Button onClick={addExam(dispatch)}><AddIcon/></Button>
+        <Button onClick={addExam(dispatch, state.user)}><AddIcon/></Button>
       </div>
     );
   }

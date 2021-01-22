@@ -7,7 +7,8 @@ const auth = require("../utils/auth");
 examRouter.get("/exam/permitted", auth.required, async (req, res, next) => {
   const queryString = `
     SELECT exam.id as examId, exam.name as examName
-    FROM exam;
+    FROM exam
+    ORDER BY exam.id;
   `;
   const parameters = [];
   let result;
@@ -57,7 +58,7 @@ examRouter.post("/exam/", auth.required, async (req, res, next) => {
   if (!("courseId" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing courseId from message body."});
   }
-  if (typeof req.body.courseId !== "string") {
+  if (typeof req.body.courseId !== "number") {
     return next({type: "MalformedRequest", errorText: "Malformed request, courseId is of incorrect type."});
   }
 

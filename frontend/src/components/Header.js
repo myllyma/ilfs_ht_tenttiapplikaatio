@@ -1,9 +1,11 @@
 import {useContext} from 'react';
 import {Context} from '../utility/provider.js';
-import {toggleAdmin, togglePage, changeLanguage} from '../utility/callbacks';
+import { FormattedMessage } from 'react-intl';
+
 import Button from '@material-ui/core/Button';
 import {withStyles} from '@material-ui/core/styles';
-import { FormattedMessage } from 'react-intl';
+
+import {toggleAdmin, togglePage, changeLanguage, userLogOut} from '../utility/callbacks';
 
 const MenuButton = withStyles({
   root: {
@@ -59,7 +61,7 @@ const Header = () => {
             </MenuButton>
         }
         
-        <MenuButton className="navBarItem exitButton" onClick={togglePage(dispatch, "EXAMS")}>
+        <MenuButton className="navBarItem exitButton" onClick={userLogOut(dispatch)}>
           <FormattedMessage id="header_logout"/>
         </MenuButton>
       </nav>

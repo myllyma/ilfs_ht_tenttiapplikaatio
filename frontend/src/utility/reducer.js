@@ -2,6 +2,32 @@ const reducer = (state, action) => {
   const newProgramState = JSON.parse(JSON.stringify(state));
   switch (action.type) {
     // Program state guidance operations
+    case "CHANGEUSERNAME":
+      newProgramState.inputUserName = action.inputUserName;
+      return(newProgramState);
+
+    case "CHANGEPASSWORD":
+      newProgramState.inputPassword = action.inputPassword;
+      return(newProgramState);
+
+    case "LOGIN":
+      newProgramState.inputUserName = "";
+      newProgramState.inputPassword = "";
+      newProgramState.user = action.user;
+      return(newProgramState);
+    
+    case "LOGOUT":
+      newProgramState.inputUserName = "";
+      newProgramState.inputPassword = "";
+      delete newProgramState.user;
+      newProgramState.exams = [];
+      newProgramState.visiblePage = "LOGIN";
+      return(newProgramState);
+
+    case "SET_EXAMS":
+      newProgramState.exams = action.exams;
+      return(newProgramState);
+
     case "SWITCH_EXAM":
       newProgramState.activeExam = action.examIndex;
       newProgramState.showAnswers = false;
@@ -79,9 +105,10 @@ const reducer = (state, action) => {
       newProgramState.exams[action.examIndex].questions[action.questionIndex].answers[action.answerIndex].isAnswerCorrect = action.isAnswerCorrect;
       return(newProgramState);
 
-    // Initialize state
     case "INIT":
-      return(action.payload);
+      newProgramState.showAnswers = false;
+      newProgramState.admin = false;
+      return(newProgramState);
 
     default:
       return;

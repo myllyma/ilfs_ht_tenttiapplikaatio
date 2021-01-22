@@ -1,4 +1,5 @@
 const messages_fi = {
+  "login_text": "Kirjaudu sisään",
   "header_exams": "Tentit",
   "header_info": "Tietoa sovelluksesta",
   "header_visualization": "Visualisaatio",

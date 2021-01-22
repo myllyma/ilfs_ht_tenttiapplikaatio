@@ -12,6 +12,12 @@ const constructExamObject = (data) => {
     questions: []
   };
 
+  // Escape hatch when an exam has no questons.
+  if (data.length === 1 && data[0].questionid === null) {
+    return examObject;
+  }
+
+
   // Construct the questions and answers for the exam.
   data.forEach((row) => {
     const questionBeingChecked = examObject.questions.filter(question => question.id === row.questionid);

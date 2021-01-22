@@ -1,4 +1,5 @@
 const messages_en = {
+  "login_text": "Sign in",
   "header_exams": "Exams",
   "header_info": "Information on application",
   "header_visualization": "Visualization",

@@ -16,15 +16,15 @@ const AdminQuestion = ({examIndex, questionIndex}) => {
         <div key={answer.id}>
           <Checkbox 
             color="primary" 
-            onChange={toggleAnswerCorrectness(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].id)} 
+            onChange={toggleAnswerCorrectness(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].id, state.user)} 
             checked={answer.isAnswerCorrect}/>
           <TextField
             value={answer.answerString}
-            onChange={inputAnswerString(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].id)} />
-          <Button  onClick={deleteAnswer(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].id)}><DeleteIcon/></Button>
+            onChange={inputAnswerString(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].id, state.user)} />
+          <Button  onClick={deleteAnswer(dispatch, examIndex, questionIndex, answerIndex, state.exams[examIndex].questions[questionIndex].answers[answerIndex].id, state.user)}><DeleteIcon/></Button>
         </div>
       )}
-      <Button onClick={addAnswer(dispatch, examIndex, questionIndex, state.exams[examIndex].questions[questionIndex].id)}><AddIcon/></Button>
+      <Button onClick={addAnswer(dispatch, examIndex, questionIndex, state.exams[examIndex].questions[questionIndex].id, state.user)}><AddIcon/></Button>
     </div>
   );
 }

@@ -22,18 +22,18 @@ const AdminExamContents = () => {
             <div>
               <TextField 
                 value={state.exams[state.activeExam].questions[questionIndex].questionString}
-                onChange={inputQuestionContent(dispatch, state.activeExam, questionIndex, state.exams[state.activeExam].questions[questionIndex].id)}
+                onChange={inputQuestionContent(dispatch, state.activeExam, questionIndex, state.exams[state.activeExam].questions[questionIndex].id, state.user)}
                 label="Kysymys" />
               <TextField
                 value={state.exams[state.activeExam].questions[questionIndex].subject}
-                onChange={inputQuestionSubject(dispatch, state.activeExam, questionIndex, state.exams[state.activeExam].questions[questionIndex].id)}
+                onChange={inputQuestionSubject(dispatch, state.activeExam, questionIndex, state.exams[state.activeExam].questions[questionIndex].id, state.user)}
                 label="Kategoria" />
-              <Button onClick={deleteQuestion(dispatch, state.activeExam, questionIndex, state.exams[state.activeExam].questions[questionIndex].id)}><DeleteIcon/></Button>
+              <Button onClick={deleteQuestion(dispatch, state.activeExam, questionIndex, state.exams[state.activeExam].questions[questionIndex].id, state.user)}><DeleteIcon/></Button>
             </div>
             <AdminQuestion examIndex={state.activeExam} questionIndex={questionIndex} />
           </Paper>
         )}
-        <Button onClick={addQuestion(dispatch, state.activeExam, state.exams[state.activeExam].id)}>Lisää kysymys<AddIcon/></Button>
+        <Button onClick={addQuestion(dispatch, state.activeExam, state.exams[state.activeExam].id, state.user)}>Lisää kysymys<AddIcon/></Button>
       </div>
     );
   }
