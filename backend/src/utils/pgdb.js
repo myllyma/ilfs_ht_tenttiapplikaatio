@@ -1,6 +1,9 @@
 const {Pool} = require("pg");
 
 const connectionString = process.env.DATABASE_URL;
+
+console.log("connectionString:", connectionString);
+
 const pool = new Pool({connectionString});
 
 const query = (queryString, params, callback) => {

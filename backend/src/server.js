@@ -18,7 +18,7 @@ const server = express();
 server.use(cors({origin: SERVER_URI, optionsSuccessStatus:200}));
 server.use(express.json());
 server.use(morgan("dev"));
-server.use(express.static("build"));
+!process.env.HEROKU && server.use(express.static("build"));
 server.use("/api", userRouter);
 server.use("/api", answerRouter);
 server.use("/api", questionRouter);
