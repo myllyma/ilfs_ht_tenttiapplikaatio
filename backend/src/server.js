@@ -7,8 +7,15 @@ const questionRouter = require("./routes/questionRouter");
 const examRouter = require("./routes/examRouter");
 const middleware = require("./utils/middleware");
 
+let SERVER_URI = "";
+if (process.env.HEROKU) {
+  SERVER_URI = "https://fierce-beyond-04984.herokuapp.com/";
+} else {
+  SERVER_URI = "http://localhost:3000";
+}
+
 const server = express();
-server.use(cors({origin: "http://localhost:3000", optionsSuccessStatus:200}));
+server.use(cors({origin: SERVER_URI, optionsSuccessStatus:200}));
 server.use(express.json());
 server.use(morgan("dev"));
 server.use(express.static("build"));
