@@ -5,6 +5,7 @@ const db = require("../utils/pgdb");
 const auth = require("../utils/auth");
 const auth = require("../utils/auth");
 
+// Upload a new image.
 imageRouter.post("/upload/", auth.required, async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0, !("questionId" in req-body)) {
     return next({type: "MalformedRequest", errorText: "No files were uploaded."});
