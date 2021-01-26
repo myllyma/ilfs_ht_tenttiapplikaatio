@@ -12,7 +12,8 @@
     "test": "cross-env NODE_ENV=test echo \"Error: no test specified\" && exit 1",
     "build_frontend": "node .\\scripts\\build_frontend.js",
     "deploy_heroku": "node .\\scripts\\deploy_heroku.js",
-    "deploy_heroku_full": "node .\\scripts\\deploy_heroku_full.js"
+    "deploy_heroku_full": "node .\\scripts\\deploy_heroku_full.js",
+    "heroku_log": "heroku logs -t"
   },
   "author": "",
   "license": "ISC",
