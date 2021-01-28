@@ -230,6 +230,23 @@ const toggleAnswerCorrectness = (dispatch, examIndex, questionIndex, answerIndex
   })();
 }
 
+// -----------------------------------
+// Gimmicky callbacks
+// -----------------------------------
+
+const uploadFile = (acceptedFiles) => (dispatch, examIndex, answerIndex) => () => {
+  (async () => {
+    let response;
+    try {
+      response = await axios.post(`${SERVER_URI}/upload/`, {acceptedFiles, examIndex, answerIndex}, { headers: { 'Content-Type': 'multipart/form-data' } });
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    console.log(response);
+  })();
+}
+
 export {
   inputUserNameChange,
   inputPasswordChange,
@@ -251,5 +268,6 @@ export {
   inputExamName,
   inputQuestionContent,
   inputQuestionSubject,
-  inputAnswerString
+  inputAnswerString,
+  uploadFile
 };
