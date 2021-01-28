@@ -8,11 +8,17 @@ const examRouter = require("./routes/examRouter");
 const middleware = require("./utils/middleware");
 
 let SERVER_URI = "";
-if (process.env.HEROKU) {
-  SERVER_URI = "https://fierce-beyond-04984.herokuapp.com/";
-} else {
-  SERVER_URI = "http://localhost:3000";
+switch (process.env.NODE_ENV) {
+  case "production":
+    SERVER_URI = "https://fierce-beyond-04984.herokuapp.com/";
+    break;
+  case "development":
+    SERVER_URI = "http://localhost:3000";
+    break;
+  default:
 }
+
+console.log("SERVER_URI: ", SERVER_URI);
 
 const server = express();
 server.use(cors({origin: SERVER_URI, optionsSuccessStatus:200}));

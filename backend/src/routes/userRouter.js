@@ -69,6 +69,7 @@ userRouter.post("/login/", async (req, res, next) => {
   try {
     result = await db.query(queryString, parameters);
   } catch (err) {
+    console.log("ERROR FROM DATABASE:", err);
     return next({type: "DatabaseError", errorText: "Database error during login."});
   }
 
