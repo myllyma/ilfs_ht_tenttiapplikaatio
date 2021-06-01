@@ -6,6 +6,7 @@ const answerRouter = require("./routes/answerRouter");
 const questionRouter = require("./routes/questionRouter");
 const examRouter = require("./routes/examRouter");
 const middleware = require("./utils/middleware");
+const imageRouter = require("./routes/imageRouter");
 
 let SERVER_URI = "";
 switch (process.env.NODE_ENV) {
@@ -18,8 +19,6 @@ switch (process.env.NODE_ENV) {
   default:
 }
 
-console.log("SERVER_URI: ", SERVER_URI);
-
 const server = express();
 server.use(cors({origin: SERVER_URI, optionsSuccessStatus:200}));
 server.use(express.json());
@@ -29,6 +28,7 @@ server.use("/api", userRouter);
 server.use("/api", answerRouter);
 server.use("/api", questionRouter);
 server.use("/api", examRouter);
+server.use("/api", imageRouter);
 server.use(middleware.unknownEndpoint);
 server.use(middleware.errorHandler);
 

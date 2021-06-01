@@ -1,7 +1,51 @@
 import axios from "axios";
-import {SERVER_URI} from "../utility/config"
+import {SERVER_URI} from "../utility/config";
+import {prepareExamAnswers} from "../utility/helpers"
 
 const NEW_EXAMS_COURSE_TEMP = 1; // Scaffolding until courses properly implemented on frontend
+
+// -----------------------------------
+// Initialization
+// -----------------------------------
+const initialize = async (dispatch) => {
+  const user = JSON.parse(window.localStorage.getItem("user"));
+  let initialState = {};
+
+  initialState.inputUserName = "";
+  initialState.inputPassword = "";
+  initialState.activeExam = 0;
+  initialState.showAnswers = false;
+  initialState.admin = false;
+
+  if (user) {
+    const permittedExams = await axios.get(`${SERVER_URI}/exam/permitted`, {headers: {"Authorization": `Token ${user.userToken}`}});
+    let examList = permittedExams.data.map(async (exam) => 
+      await axios.get(`${SERVER_URI}/exam/${exam.examid}`, {headers: {"Authorization": `Token ${user.userToken}`}})
+    );
+    examList = await Promise.all(examList);
+    examList = examList.map(exam => exam.data);
+
+    initialState.user = user;
+    initialState.exams = examList;
+    initialState.visiblePage = "EXAMS";
+
+  } else {
+    initialState.user = {};
+    initialState.exams = [];
+    initialState.visiblePage = "LOGIN";
+  }
+
+  const userLanguage = localStorage.getItem("userLanguage");
+  if (userLanguage) {
+    initialState.language = userLanguage;
+    window.localStorage.setItem("userLanguage",  userLanguage);
+  } else {
+    initialState.language = "fi";
+    window.localStorage.setItem("userLanguage",  "fi");
+  }
+
+  dispatch({type: "INIT", initialState});
+}
 
 // -----------------------------------
 // User related callbacks
@@ -29,7 +73,6 @@ const userLogin = (dispatch, inputUserName, inputPassword) => () => {
     // Copy login data to state and clear password and username inputs from memory.
     dispatch({type: "LOGIN", user: response.data});
 
-
     let user = response.data;
     let permittedExams;
 
@@ -46,7 +89,7 @@ const userLogin = (dispatch, inputUserName, inputPassword) => () => {
     examList = examList.map(exam => exam.data);
 
     dispatch({type: "SET_EXAMS", exams: examList});
-    dispatch({type: "TOGGLE_PAGE", page: "EXAMS"});
+    dispatch({type: "SWITCH_PAGE", page: "EXAMS"});
     dispatch({type: "SWITCH_EXAM", examIndex: 0});
 
     window.localStorage.setItem("user", JSON.stringify(user))
@@ -55,7 +98,7 @@ const userLogin = (dispatch, inputUserName, inputPassword) => () => {
 
 const userLogOut = (dispatch) => () => {
   window.localStorage.removeItem("user");
-  dispatch({type: "TOGGLE_PAGE", page: "LOGIN"});
+  dispatch({type: "SWITCH_PAGE", page: "LOGIN"});
   dispatch({type: "LOGOUT"});
 }
 
@@ -71,8 +114,18 @@ const userTogglesAnswer = (dispatch, examIndex, questionIndex, answerIndex) => (
   dispatch({type: "USER_TOGGLES_ANSWER", examIndex, questionIndex, answerIndex});
 }
 
-const userTogglesDoneWithAnswering = (dispatch) => ()  => {
-  dispatch({type: "USER_TOGGLES_DONE_WITH_ANSWERING"});
+const userTogglesDoneWithAnswering = (dispatch, examIndex, user, exam) => ()  => {
+  (async () => {
+    const preparedAnswers = prepareExamAnswers(exam);
+    let response;
+    try {
+      response = await axios.post(`${SERVER_URI}/exam/submit`, {courseId: NEW_EXAMS_COURSE_TEMP, answers: preparedAnswers}, {headers: {"Authorization": `Token ${user.userToken}`}});
+    } catch (error) {
+      return;
+    }
+
+    dispatch({type: "USER_TOGGLES_DONE_WITH_ANSWERING"});
+  })();
 }
 
 const toggleAdmin = (dispatch) => ()  => {
@@ -80,7 +133,7 @@ const toggleAdmin = (dispatch) => ()  => {
 }
 
 const togglePage = (dispatch, page) => () => {
-  dispatch({type: "TOGGLE_PAGE", page});
+  dispatch({type: "SWITCH_PAGE", page});
 }
 
 const changeLanguage = (dispatch, language) => () => {
@@ -89,7 +142,7 @@ const changeLanguage = (dispatch, language) => () => {
 }
 
 // -----------------------------------
-// Exam related callbacks
+// Admin exam related callbacks
 // -----------------------------------
 
 const addExam = (dispatch, user) => () => {
@@ -128,7 +181,7 @@ const inputExamName = (dispatch, examIndex, examId, user) => (event)  => {
 }
 
 // -----------------------------------
-// Question related callbacks
+// Admin question related callbacks
 // -----------------------------------
 
 const addQuestion = (dispatch, examIndex, examId, user) => () => {
@@ -180,7 +233,7 @@ const inputQuestionSubject = (dispatch, examIndex, questionIndex, questionId, us
 }
 
 // -----------------------------------
-// Answer related callbacks
+// Admin answer related callbacks
 // -----------------------------------
 
 const addAnswer = (dispatch, examIndex, questionIndex, questionId, user) => ()  => {
@@ -234,20 +287,23 @@ const toggleAnswerCorrectness = (dispatch, examIndex, questionIndex, answerIndex
 // Gimmicky callbacks
 // -----------------------------------
 
-const uploadFile = (acceptedFiles) => (dispatch, examIndex, answerIndex) => () => {
+const uploadFile = (dispatch, examIndex, questionIndex, user, acceptedFiles) => {
   (async () => {
     let response;
+
     try {
-      response = await axios.post(`${SERVER_URI}/upload/`, {acceptedFiles, examIndex, answerIndex}, { headers: { 'Content-Type': 'multipart/form-data' } });
+      response = await axios.post(`${SERVER_URI}/upload/`, {acceptedFiles, examIndex, questionIndex}, { headers: { 'Content-Type': 'multipart/form-data', "Authorization": `Token ${user.userToken}`} });
     } catch (error) {
       console.log(error);
       return;
     }
+    
     console.log(response);
   })();
 }
 
 export {
+  initialize,
   inputUserNameChange,
   inputPasswordChange,
   userLogin,

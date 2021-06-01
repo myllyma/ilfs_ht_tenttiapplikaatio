@@ -1,5 +1,5 @@
 const reducer = (state, action) => {
-  const newProgramState = JSON.parse(JSON.stringify(state));
+  let newProgramState = JSON.parse(JSON.stringify(state));
   switch (action.type) {
     // Program state guidance operations
     case "CHANGEUSERNAME":
@@ -46,7 +46,7 @@ const reducer = (state, action) => {
       newProgramState.admin = !state.admin;
       return(newProgramState);
     
-    case "TOGGLE_PAGE":
+    case "SWITCH_PAGE":
       newProgramState.visiblePage = action.page;
       return(newProgramState);
 
@@ -106,8 +106,7 @@ const reducer = (state, action) => {
       return(newProgramState);
 
     case "INIT":
-      newProgramState.showAnswers = false;
-      newProgramState.admin = false;
+      newProgramState = action.initialState;
       return(newProgramState);
 
     default:

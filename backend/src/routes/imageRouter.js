@@ -3,7 +3,6 @@ const randomstring = require("randomstring");
 
 const db = require("../utils/pgdb");
 const auth = require("../utils/auth");
-const auth = require("../utils/auth");
 
 // Upload a new image.
 imageRouter.post("/upload/", auth.required, async (req, res) => {

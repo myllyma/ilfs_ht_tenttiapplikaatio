@@ -9,7 +9,8 @@ const messages_fi = {
   "form_show_answers": "Näytä vastaukset",
   "add_question_button": "Lisää kysymys",
   "language_selector_en": "EN",
-  "language_selector_fi": "FI"
+  "language_selector_fi": "FI",
+  "drag_drop_prompt": "Vedä haluttu tiedosto tähän laatikkoon"
 }
 
 export default messages_fi;

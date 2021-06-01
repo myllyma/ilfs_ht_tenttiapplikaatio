@@ -53,7 +53,17 @@ examRouter.get("/exam/:examId", auth.required, async (req, res, next) => {
   return res.status(200).json(examObject);
 });
 
-// Post a new exam
+// User submits a filled out exam.
+examRouter.post("/exam/submit", auth.required, async (req, res, next) => {
+
+});
+
+// User requests correct answers to an exam.
+examRouter.get("/exam/requestanswers", auth.required, async (req, res, next) => {
+
+});
+
+// Post a new exam.
 examRouter.post("/exam/", auth.required, async (req, res, next) => {
   if (!("courseId" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing courseId from message body."});
@@ -89,7 +99,7 @@ examRouter.post("/exam/", auth.required, async (req, res, next) => {
   return res.status(200).json(responseObject);
 });
 
-// Delete an exam
+// Admin deletes an exam.
 examRouter.delete("/exam/:examId", auth.required, async (req, res, next) => {
   if (!("examId" in req.params)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing examId from message parameters."});
@@ -114,7 +124,7 @@ examRouter.delete("/exam/:examId", auth.required, async (req, res, next) => {
   return res.status(200).end();
 });
 
-// Set exam name
+// Admin sets an exams name.
 examRouter.put("/exam/name", auth.required, async (req, res, next) => {
   if (!("examId" in req.body) || !("newExamName" in req.body)) {
     return next({type: "MalformedRequest", errorText: "Malformed request, missing examId or newExamName from message body."});

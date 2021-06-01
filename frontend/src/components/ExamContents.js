@@ -19,7 +19,7 @@ const ExamContents = () => {
               <Questions key={question.id} examIndex={state.activeExam} questionIndex={questionIndex}/>
           )}
         </div>
-        {!state.showAnswers && <Button variant="contained" color="primary" onClick={userTogglesDoneWithAnswering(dispatch)}><FormattedMessage id="form_show_answers"/></Button>}
+        {!state.showAnswers && <Button variant="contained" color="primary" onClick={userTogglesDoneWithAnswering(dispatch, state.activeExam, state.user, state.exam[state.activeExam])}><FormattedMessage id="form_show_answers"/></Button>}
       </div>
     );
   }
