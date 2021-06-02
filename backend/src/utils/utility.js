@@ -66,4 +66,6 @@ const constructExamObject = (data) => {
   return examObject;
 }
 
-module.exports = constructExamObject;
+module.exports = {
+  constructExamObject
+};
