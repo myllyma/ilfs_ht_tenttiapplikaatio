@@ -66,7 +66,7 @@ Returns on success:
 ------------------------------------ */
 
 answerRouter.delete("/answer/:answerId", auth.required, async (req, res, next) => {
-  const verificationResult = verifyPostAnswer(req.body, req.params);
+  const verificationResult = verifyDeleteAnswer(req.body, req.params);
   if (verificationResult.error) {return next(verificationResult);}
 
   const queryString = `
