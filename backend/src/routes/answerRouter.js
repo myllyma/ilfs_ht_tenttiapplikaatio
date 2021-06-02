@@ -1,15 +1,32 @@
 const answerRouter = require("express").Router();
 const db = require("../utils/pgdb");
 const auth = require("../utils/auth");
+const {
+  verifyPostAnswer,
+  verifyDeleteAnswer,
+  verifySetAnswerString,
+  verifyInvertAnswerState
+} = require("../verification/answerverify");
 
-// Post a new answer
+/* ------------------------------------
+Post a new answer.
+Expects in parameters:
+  NOTHING
+Expects in body:
+  questionId:string
+Returns on success:
+  {
+    id:number, 
+    questionId:number,
+    answerString:string, 
+    isAnswerCorrect:bool,
+    isChecked:bool
+  }
+------------------------------------ */
+
 answerRouter.post("/answer/", auth.required, async (req, res, next) => {
-  if (!("questionId" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing questionId from message params."});
-  }
-  if (typeof req.body.questionId !== "string") {
-    return next({type: "MalformedRequest", errorText: "Malformed request, questionId is of incorrect type."});
-  }
+  const verificationResult = verifyPostAnswer(req.body, req.params);
+  if (verificationResult.error) {return next(verificationResult);}
 
   const queryString = `
     INSERT INTO public.answer (question_id, answer_text, is_answer_correct)
@@ -29,24 +46,28 @@ answerRouter.post("/answer/", auth.required, async (req, res, next) => {
     return next({type: "DatabaseError", errorText: "Failed to add a new resource to database."});
   }
 
-  const responseObject = {
+  return res.status(200).json({
     id: result.rows[0].id, 
     questionId: req.body.questionId,
     answerString: "", 
     isAnswerCorrect: false,
     isChecked: false
-  }
-  return res.status(200).json(responseObject);
+  });
 });
 
-// Delete an answer
+/* ------------------------------------
+Delete an answer.
+Expects in parameters:
+  answerId:number
+Expects in body:
+  NOTHING
+Returns on success:
+  NOTHING
+------------------------------------ */
+
 answerRouter.delete("/answer/:answerId", auth.required, async (req, res, next) => {
-  if (!("answerId" in req.params)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing answerId from message body."});
-  }
-  if (typeof req.params.answerId !== "string") {
-    return next({type: "MalformedRequest", errorText: "Malformed request, answerId is of incorrect type."});
-  }
+  const verificationResult = verifyPostAnswer(req.body, req.params);
+  if (verificationResult.error) {return next(verificationResult);}
 
   const queryString = `
     DELETE FROM public.answer
@@ -64,14 +85,19 @@ answerRouter.delete("/answer/:answerId", auth.required, async (req, res, next) =
   return res.status(200).end();
 });
 
-// Set answer string
+/* ------------------------------------
+Set answer string.
+Expects in parameters:
+  NOTHING
+Expects in body:
+  answerId:number
+Returns on success:
+  answerString:string
+------------------------------------ */
+
 answerRouter.put("/answer/answerstring", auth.required, async (req, res, next) => {
-  if (!("newAnswerString" in req.body) || !("answerId" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing newAnswerString or answerId from message body."});
-  }
-  if (typeof req.body.newAnswerString !== "string" || typeof req.body.answerId !== "string") {
-    return next({type: "MalformedRequest", errorText: "Malformed request, newAnswerString or answerId is of incorrect type."});
-  }
+  const verificationResult = verifySetAnswerString(req.body, req.params);
+  if (verificationResult.error) {return next(verificationResult);}
 
   const queryString = `
     UPDATE public.answer
@@ -92,21 +118,24 @@ answerRouter.put("/answer/answerstring", auth.required, async (req, res, next) =
     return next({type: "ResourceNotLocated", content: "Indicated resource not in database."});
   }
 
-  const responseObject = {
+  return res.status(200).json({
     answerString: result.rows[0].answer_text
-  };
-
-  return res.status(200).json(responseObject);
+  });
 });
 
-// Invert answer truth state
+/* ------------------------------------
+Invert answer truth state
+Expects in parameters:
+  NOTHING
+Expects in body:
+  answerId:number
+Returns on success:
+  isAnswerCorrect:bool
+------------------------------------ */
+
 answerRouter.put("/answer/toggleiscorrect", auth.required, async (req, res, next) => {
-  if (!("answerId" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing answerId from message body."});
-  }
-  if (typeof req.body.answerId !== "string") {
-    return next({type: "MalformedRequest", errorText: "Malformed request, answerId is of incorrect type."});
-  }
+  const verificationResult = verifyInvertAnswerState(req.body, req.params);
+  if (verificationResult.error) {return next(verificationResult);}
 
   const queryString = `
     UPDATE public.answer
@@ -127,11 +156,9 @@ answerRouter.put("/answer/toggleiscorrect", auth.required, async (req, res, next
     return next({type: "ResourceNotLocated", content: "Indicated resource not in database."});
   }
 
-  const responseObject = {
+  return res.status(200).json({
     isAnswerCorrect: result.rows[0].is_answer_correct
-  };
-  
-  return res.status(200).json(responseObject);
+  });
 });
 
 module.exports = answerRouter;
