@@ -45,11 +45,9 @@ imageRouter.post("/upload/", auth.required, async (req, res) => {
     return next({type: "DatabaseError", errorText: "Failed to add a new resource to database."});
   }
 
-  const responseObject = {
+  return resizeTo.status(200).json({
     fileaddress: `img/${newFileName}`
-  }
-
-  return resizeTo.status(200).json(responseObject)
+  }).end();
 });
 
 module.exports = imageRouter;
