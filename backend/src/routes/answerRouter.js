@@ -19,8 +19,8 @@ Returns on success:
 ------------------------------------ */
 
 answerRouter.post("/answer/", auth.required, async (req, res, next) => {
-  if (!("questionId" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing questionId-field from message body.", details: "" });}
-  if (typeof req.body.questionId !== "number") {return ({error: true, type: "MalformedRequest", message: "Malformed request, questionId-field is of incorrect type, number expected.", details: "" });}
+  if (!("questionId" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing questionId-field from message body.", details: "" });}
+  if (typeof req.body.questionId !== "number") {return next({error: true, type: "MalformedRequest", message: "Malformed request, questionId-field is of incorrect type, number expected.", details: "" });}
 
   const queryString = `
     INSERT INTO public.answer (question_id, answer_text, is_answer_correct)
@@ -60,8 +60,8 @@ Returns on success:
 ------------------------------------ */
 
 answerRouter.delete("/answer/:answerId", auth.required, async (req, res, next) => {
-  if (!("questionId" in req.params)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing questionId-field from message body.", details: "" });}
-  if (typeof req.params.questionId !== "number") {return ({error: true, type: "MalformedRequest", message: "Malformed request, questionId-field is of incorrect type, number expected.", details: "" });}
+  if (!("questionId" in req.params)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing questionId-field from message body.", details: "" });}
+  if (!Number(req.params.questionId)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, questionId-field is of incorrect type, number expected.", details: "" });}
 
   const queryString = `
     DELETE FROM public.answer
@@ -90,10 +90,10 @@ Returns on success:
 ------------------------------------ */
 
 answerRouter.put("/answer/answerstring", auth.required, async (req, res, next) => {
-  if (!("answerId" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing answerId-field from message body.", details: "" });}
-  if (typeof req.body.answerId !== "number") {return ({error: true, type: "MalformedRequest", message: "Malformed request, answerId-field is of incorrect type, number expected.", details: "" });}
-  if (!("newAnswerString" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing newAnswerString-field from message body.", details: "" });}
-  if (typeof req.body.newAnswerString !== "string") {return ({error: true, type: "MalformedRequest", message: "Malformed request, newAnswerString-field is of incorrect type, string expected.", details: "" });}
+  if (!("answerId" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing answerId-field from message body.", details: "" });}
+  if (typeof req.body.answerId !== "number") {return next({error: true, type: "MalformedRequest", message: "Malformed request, answerId-field is of incorrect type, number expected.", details: "" });}
+  if (!("newAnswerString" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing newAnswerString-field from message body.", details: "" });}
+  if (typeof req.body.newAnswerString !== "string") {return next({error: true, type: "MalformedRequest", message: "Malformed request, newAnswerString-field is of incorrect type, string expected.", details: "" });}
   
   const queryString = `
     UPDATE public.answer
@@ -130,8 +130,8 @@ Returns on success:
 ------------------------------------ */
 
 answerRouter.put("/answer/toggleiscorrect", auth.required, async (req, res, next) => {
-  if (!("answerId" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing answerId-field from message body.", details: "" });}
-  if (typeof req.body.answerId !== "number") {return ({error: true, type: "MalformedRequest", message: "Malformed request, answerId-field is of incorrect type, number expected.", details: "" });}
+  if (!("answerId" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing answerId-field from message body.", details: "" });}
+  if (typeof req.body.answerId !== "number") {return next({error: true, type: "MalformedRequest", message: "Malformed request, answerId-field is of incorrect type, number expected.", details: "" });}
   
   const queryString = `
     UPDATE public.answer
