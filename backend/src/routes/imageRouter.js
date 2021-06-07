@@ -4,7 +4,18 @@ const randomstring = require("randomstring");
 const db = require("../utils/pgdb");
 const auth = require("../utils/auth");
 
-// Upload a new image.
+/* ------------------------------------
+Upload a new image.
+Expects in parameters:
+  NOTHING
+Expects in body:
+  NOTHING
+Other expects:
+  files:binary
+Returns on success:
+  NOTHING
+------------------------------------ */
+
 imageRouter.post("/upload/", auth.required, async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0, !("questionId" in req-body)) {
     return next({type: "MalformedRequest", errorText: "No files were uploaded."});
