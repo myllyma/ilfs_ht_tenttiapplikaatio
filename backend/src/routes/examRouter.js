@@ -4,16 +4,9 @@ const auth = require("../utils/auth");
 const {
   constructExamObject
 } = require("../utils/utility");
-const {
-  verifyGetExamContents,
-  verifyPostNewExam,
-  verifyDeleteExam,
-  verifySetExamName
-} = require("../verification/answerverify");
 
 /* ------------------------------------
 Get a list of exams permitted for the user. INCOMPLETE
-TODO: Use the auth-token to extract user ID.
 TODO: Filter user ID to database values to see if user has access to the exam.
 Expects in parameters:
   NOTHING
@@ -24,6 +17,8 @@ Returns on success:
 ------------------------------------ */
 
 examRouter.get("/exam/permitted", auth.required, async (req, res, next) => {
+  const userToken = jwt.decode(req.headers.authorization.split(" ")[1]);
+
   const queryString = `
     SELECT 
       exam.id as examId,
@@ -77,8 +72,8 @@ Returns on success:
 ------------------------------------ */
 
 examRouter.get("/exam/:examId", auth.required, async (req, res, next) => {
-  const verificationResult = verifyGetExamContents(req.body, req.params);
-  if (verificationResult.error) {return next(verificationResult);}
+  if (!("examId" in req.params)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing examId-field from message params.", details: "" });}
+  if (!Number(req.params.examId)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, examId-field is of incorrect type, number expected.", details: "" });}
 
   const queryString = `
     SELECT  
@@ -158,8 +153,8 @@ Returns on success:
 ------------------------------------ */
 
 examRouter.post("/exam/", auth.required, async (req, res, next) => {
-  const verificationResult = verifyPostNewExam(req.body, req.params);
-  if (verificationResult.error) {return next(verificationResult);}
+  if (!("courseId" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing courseId-field from message body.", details: "" });}
+  if (typeof req.body.courseId !== "number") {return next({error: true, type: "MalformedRequest", message: "Malformed request, courseId-field is of incorrect type, number expected.", details: "" });}
 
   const queryString = `
     INSERT INTO public.exam (course_id, name)
@@ -198,8 +193,8 @@ Returns on success:
 ------------------------------------ */
 
 examRouter.delete("/exam/:examId", auth.required, async (req, res, next) => {
-  const verificationResult = verifyDeleteExam(req.body, req.params);
-  if (verificationResult.error) {return next(verificationResult);}
+  if (!("examId" in params)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing examId-field from message params.", details: "" });}
+  if (!Number(req.params.examId)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, examId-field is of incorrect type, number expected.", details: "" });}
 
   const queryString = `
     DELETE FROM public.exam
@@ -222,14 +217,17 @@ Admin sets an exams name.
 Expects in parameters:
   NOTHING
 Expects in body:
+  examId:int
   newExamName:string
 Returns on success:
   name:string
 ------------------------------------ */
 
 examRouter.put("/exam/name", auth.required, async (req, res, next) => {
-  const verificationResult = verifySetExamName(req.body, req.params);
-  if (verificationResult.error) {return next(verificationResult);}
+  if (!("examId" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing examId-field from message body.", details: "" });}
+  if (typeof req.body.examId !== "string") {return ({error: true, type: "MalformedRequest", message: "Malformed request, examId-field is of incorrect type, number expected.", details: "" });}
+  if (!("newExamName" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing newExamName-field from message body.", details: "" });}
+  if (typeof req.body.newExamName !== "string") {return ({error: true, type: "MalformedRequest", message: "Malformed request, newExamName-field is of incorrect type, string expected.", details: "" });}
 
   const queryString = `
     UPDATE public.exam
