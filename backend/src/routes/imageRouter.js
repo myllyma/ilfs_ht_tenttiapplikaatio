@@ -6,6 +6,7 @@ const auth = require("../utils/auth");
 
 /* ------------------------------------
 Upload a new image.
+TODO: Incomplete operation.
 Expects in parameters:
   NOTHING
 Expects in body:
