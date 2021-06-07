@@ -1,12 +1,6 @@
 const answerRouter = require("express").Router();
 const db = require("../utils/pgdb");
 const auth = require("../utils/auth");
-const {
-  verifyPostAnswer,
-  verifyDeleteAnswer,
-  verifySetAnswerString,
-  verifyInvertAnswerState
-} = require("../verification/answerverify");
 
 /* ------------------------------------
 Post a new answer.
@@ -25,8 +19,8 @@ Returns on success:
 ------------------------------------ */
 
 answerRouter.post("/answer/", auth.required, async (req, res, next) => {
-  const verificationResult = verifyPostAnswer(req.body, req.params);
-  if (verificationResult.error) {return next(verificationResult);}
+  if (!("questionId" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing questionId-field from message body.", details: "" });}
+  if (typeof req.body.questionId !== "number") {return ({error: true, type: "MalformedRequest", message: "Malformed request, questionId-field is of incorrect type, number expected.", details: "" });}
 
   const queryString = `
     INSERT INTO public.answer (question_id, answer_text, is_answer_correct)
@@ -66,8 +60,8 @@ Returns on success:
 ------------------------------------ */
 
 answerRouter.delete("/answer/:answerId", auth.required, async (req, res, next) => {
-  const verificationResult = verifyDeleteAnswer(req.body, req.params);
-  if (verificationResult.error) {return next(verificationResult);}
+  if (!("questionId" in req.params)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing questionId-field from message body.", details: "" });}
+  if (typeof req.params.questionId !== "number") {return ({error: true, type: "MalformedRequest", message: "Malformed request, questionId-field is of incorrect type, number expected.", details: "" });}
 
   const queryString = `
     DELETE FROM public.answer
@@ -96,9 +90,11 @@ Returns on success:
 ------------------------------------ */
 
 answerRouter.put("/answer/answerstring", auth.required, async (req, res, next) => {
-  const verificationResult = verifySetAnswerString(req.body, req.params);
-  if (verificationResult.error) {return next(verificationResult);}
-
+  if (!("answerId" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing answerId-field from message body.", details: "" });}
+  if (typeof req.body.answerId !== "number") {return ({error: true, type: "MalformedRequest", message: "Malformed request, answerId-field is of incorrect type, number expected.", details: "" });}
+  if (!("newAnswerString" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing newAnswerString-field from message body.", details: "" });}
+  if (typeof req.body.newAnswerString !== "string") {return ({error: true, type: "MalformedRequest", message: "Malformed request, newAnswerString-field is of incorrect type, string expected.", details: "" });}
+  
   const queryString = `
     UPDATE public.answer
     SET answer_text = $1
@@ -134,9 +130,9 @@ Returns on success:
 ------------------------------------ */
 
 answerRouter.put("/answer/toggleiscorrect", auth.required, async (req, res, next) => {
-  const verificationResult = verifyInvertAnswerState(req.body, req.params);
-  if (verificationResult.error) {return next(verificationResult);}
-
+  if (!("answerId" in req.body)) {return ({error: true, type: "MalformedRequest", message: "Malformed request, missing answerId-field from message body.", details: "" });}
+  if (typeof req.body.answerId !== "number") {return ({error: true, type: "MalformedRequest", message: "Malformed request, answerId-field is of incorrect type, number expected.", details: "" });}
+  
   const queryString = `
     UPDATE public.answer
     SET is_answer_correct = NOT is_answer_correct
