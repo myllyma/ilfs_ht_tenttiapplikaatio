@@ -3,14 +3,25 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../utils/pgdb");
 
-// Handle new user signup process.
+/* ------------------------------------
+Handle new user signup process.
+Expects in parameters:
+  NOTHING
+Expects in body:
+  userName:string
+  password:string
+  email:string
+Returns on success:
+  NOTHING
+------------------------------------ */
+
 userRouter.post("/signup", async (req, res, next) => {
-  if (!("userName" in req.body) || !("password" in req.body) || !("email" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing userName, password or email from message params."});
-  }
-  if (typeof req.body.userName !== "string" || typeof req.body.password !== "string" || typeof req.body.email !== "string") {
-    return next({type: "MalformedRequest", errorText: "Malformed request, userName, password or email is of incorrect type."});
-  }
+  if (!("userName" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing userName-field from message body.", details: "" });}
+  if (typeof req.body.userName !== "string") {return next({error: true, type: "MalformedRequest", message: "Malformed request, userName-field is of incorrect type, string expected.", details: "" });}
+  if (!("password" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing password-field from message body.", details: "" });}
+  if (typeof req.body.password !== "string") {return next({error: true, type: "MalformedRequest", message: "Malformed request, password-field is of incorrect type, string expected.", details: "" });}
+  if (!("email" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing email-field from message body.", details: "" });}
+  if (typeof req.body.email !== "string") {return next({error: true, type: "MalformedRequest", message: "Malformed request, email-field is of incorrect type, string expected.", details: "" });}
 
   let queryString = `
     SELECT *
@@ -49,14 +60,25 @@ userRouter.post("/signup", async (req, res, next) => {
   }
 });
 
-// Handle user login.
+/* ------------------------------------
+Handle user login.
+TODO: Once front has been fixed so that it gets the necessary data from the user token, remove extra returns.
+Expects in parameters:
+  NOTHING
+Expects in body:
+  userName:string
+  password:string
+Returns on success:
+  userToken:string
+  userName:string
+  role:string
+------------------------------------ */
+
 userRouter.post("/login/", async (req, res, next) => {
-  if (!("userName" in req.body) || !("password" in req.body)) {
-    return next({type: "MalformedRequest", errorText: "Malformed request, missing userName or password from message params."});
-  }
-  if (typeof req.body.userName !== "string" || typeof req.body.password !== "string") {
-    return next({type: "MalformedRequest", errorText: "Malformed request, userName or password is of incorrect type."});
-  }
+  if (!("userName" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing userName-field from message body.", details: "" });}
+  if (typeof req.body.userName !== "string") {return next({error: true, type: "MalformedRequest", message: "Malformed request, userName-field is of incorrect type, string expected.", details: "" });}
+  if (!("password" in req.body)) {return next({error: true, type: "MalformedRequest", message: "Malformed request, missing password-field from message body.", details: "" });}
+  if (typeof req.body.password !== "string") {return next({error: true, type: "MalformedRequest", message: "Malformed request, password-field is of incorrect type, string expected.", details: "" });}
 
   const queryString = `
     SELECT name, password_hash, role
